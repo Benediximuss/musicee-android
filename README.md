@@ -1,6 +1,6 @@
-# musicee_app
+# Musicee App
 
-A new Flutter project.
+A social app for discovering music.
 
 ## Getting Started
 
