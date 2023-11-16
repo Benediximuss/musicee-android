@@ -1,24 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:musicee_app/screens/home_screen.dart';
+import 'package:musicee_app/theme.dart';
 
-MaterialColor customPrimarySwatch = const MaterialColor(0xFFE98E8D, {
-  50: Color(0xFFFFF5F5),
-  100: Color(0xFFFFE0E0),
-  200: Color(0xFFFCB9B8),
-  300: Color(0xFFFA8F8E),
-  400: Color(0xFFF96B6A),
-  500: Color(0xFFE98E8D),
-  600: Color(0xFFD17E7D),
-  700: Color(0xFFB36B6A),
-  800: Color(0xFF944A49),
-  900: Color(0xFF7A3635),
-});
-
-class SignUpPage extends StatefulWidget {
+class SignInScreen extends StatefulWidget {
   @override
-  _SignUpPageState createState() => _SignUpPageState();
+  _SignInScreenState createState() => _SignInScreenState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _SignInScreenState extends State<SignInScreen> {
   // Controllers for form fields
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -66,9 +55,10 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primarySwatch: customPrimarySwatch,
+        primarySwatch: AppColors.swatchPrimary,
       ),
       home: Scaffold(
+        backgroundColor: AppColors.colorBG,
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Center(
@@ -76,11 +66,11 @@ class _SignUpPageState extends State<SignUpPage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  'Create Your Account',
+                  'Welcome back!',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: customPrimarySwatch.shade700,
+                    color: AppColors.swatchPrimary.shade700,
                   ),
                 ),
                 const SizedBox(height: 64),
@@ -94,24 +84,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       borderSide: BorderSide(
                         color: _usernameController.text.isEmpty
                             ? Colors.red
-                            : customPrimarySwatch.shade700,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _emailController,
-                  focusNode: _emailFocus,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    icon: Icon(Icons.email),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: _emailController.text.isEmpty
-                            ? Colors.red
-                            : customPrimarySwatch.shade700,
+                            : AppColors.swatchPrimary.shade700,
                       ),
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -124,12 +97,12 @@ class _SignUpPageState extends State<SignUpPage> {
                   obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'Password',
-                    icon: Icon(Icons.lock),
+                    icon: const Icon(Icons.lock),
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: _passwordController.text.isEmpty
                             ? Colors.red
-                            : customPrimarySwatch.shade700,
+                            : AppColors.swatchPrimary.shade700,
                       ),
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -141,10 +114,13 @@ class _SignUpPageState extends State<SignUpPage> {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                      );
                       // Validate inputs before submitting
                       if (_validateInputs()) {
                         // sign-up logic
-                        Navigator.pop(context);
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -153,12 +129,12 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                     child: const Text(
-                      'Create account',
+                      'Sign in',
                       style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),
                 ),
-                const SizedBox(height: 48),
+                const SizedBox(height: 64),
               ],
             ),
           ),
@@ -166,5 +142,4 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
     );
   }
-
 }
