@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/screens/welcome_screen.dart';
+import 'package:musicee_app/theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,8 +11,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: WelcomeScreen(),
+    return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: AppColors.swatchPrimary,
+      ),
+      home: const WelcomeScreen(),
     );
   }
 }

@@ -9,8 +9,8 @@ class SongDetailScreen extends StatelessWidget {
   final String artist;
   final String imagePath;
 
-  SongDetailScreen(
-      {required this.title, required this.artist, required this.imagePath});
+  const SongDetailScreen(
+      {super.key, required this.title, required this.artist, required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
