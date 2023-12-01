@@ -1,8 +1,10 @@
 // home_tab.dart
 import 'package:flutter/material.dart';
 import 'package:musicee_app/screens/all_tracks_screen.dart';
-import 'package:musicee_app/screens/tabs/widgets/row_element.dart';
-import 'package:musicee_app/theme.dart';
+import 'package:musicee_app/widgets/row_element.dart';
+import 'package:musicee_app/utils/theme.dart';
+
+import '../../utils/app_colors.dart';
 
 class HomeTab extends StatelessWidget {
   const HomeTab({super.key});
@@ -10,7 +12,6 @@ class HomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.colorBG,
       body: Padding(
         padding: const EdgeInsets.only(left: 0.0, right: 0.0),
         child: Center(

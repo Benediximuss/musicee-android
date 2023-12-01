@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:musicee_app/screens/objs/track.dart';
+import 'package:musicee_app/objects/track.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 

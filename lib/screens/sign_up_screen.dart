@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:musicee_app/theme.dart';
+
+import '../utils/app_colors.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -55,7 +56,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.colorBG,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(

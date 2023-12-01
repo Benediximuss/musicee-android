@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/screens/home_screen.dart';
-import 'package:musicee_app/theme.dart';
+
+import '../utils/app_colors.dart';
 
 class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
+
   @override
   _SignInScreenState createState() => _SignInScreenState();
 }
@@ -54,7 +57,6 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.colorBG,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
@@ -75,7 +77,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 focusNode: _usernameFocus,
                 decoration: InputDecoration(
                   labelText: 'Username',
-                  icon: Icon(Icons.person),
+                  icon: const Icon(Icons.person),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: _usernameController.text.isEmpty
@@ -110,14 +112,16 @@ class _SignInScreenState extends State<SignInScreen> {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                      MaterialPageRoute(builder: (context) => const HomeScreen()),
                     );
                     // Validate inputs before submitting
-                    if (_validateInputs()) {
-                      // sign-up logic
-                    }
+                    
+                    // if (_validateInputs()) {
+                    //   // sign-up logic
+                    // }
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
