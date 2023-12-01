@@ -2,7 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:musicee_app/screens/song_detail_screen.dart';
-import 'package:musicee_app/theme.dart';
+import 'package:musicee_app/utils/theme.dart';
+
+import '../utils/app_colors.dart';
 
 class SongCard extends StatelessWidget {
   final String title;

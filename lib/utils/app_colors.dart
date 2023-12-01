@@ -22,4 +22,6 @@ class AppColors {
     800: Color(0xFF944A49),
     900: Color(0xFF7A3635),
   });
+
+  Color ssss = Colors.red.shade200;
 }

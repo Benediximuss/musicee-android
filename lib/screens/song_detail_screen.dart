@@ -2,7 +2,9 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:musicee_app/theme.dart';
+import 'package:musicee_app/utils/theme.dart';
+
+import '../utils/app_colors.dart';
 
 class SongDetailScreen extends StatelessWidget {
   final String title;
