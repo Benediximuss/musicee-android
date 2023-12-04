@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:musicee_app/screens/tabs/home_tab.dart';
 import 'package:musicee_app/screens/tabs/profile_tab.dart';
 import 'package:musicee_app/screens/tabs/search_tab.dart';
-import 'package:musicee_app/utils/theme.dart';
 
-import '../utils/app_colors.dart';
+import '../utils/color_manager.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,10 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         title: Text(
           _tabTitles[_currentIndex],
-          style: const TextStyle(
-            fontSize: 25,
-            color: AppColors.colorPrimaryText,
-          ),
         ),
       ),
       body: PageView(
@@ -46,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: AppColors.swatchPrimary.shade50,
+        backgroundColor: ColorManager.swatchPrimary.shade50,
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {

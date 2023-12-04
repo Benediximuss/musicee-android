@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/screens/welcome_screen.dart';
-import 'package:musicee_app/utils/app_colors.dart';
+import 'package:musicee_app/utils/color_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
@@ -15,8 +15,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: AppColors.colorBG,
+        scaffoldBackgroundColor: ColorManager.colorBG,
         textTheme: GoogleFonts.robotoCondensedTextTheme(),
+        appBarTheme: AppBarTheme(
+            titleTextStyle: GoogleFonts.robotoCondensed(
+              color: ColorManager.colorAppBarText,
+              fontSize: 25,
+            ),
+            iconTheme: const IconThemeData(
+              color: ColorManager.colorAppBarText,
+            )),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,
@@ -34,7 +42,17 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        primarySwatch: AppColors.swatchPrimary,
+        primarySwatch: ColorManager.swatchPrimary,
+        inputDecorationTheme: InputDecorationTheme(
+          fillColor: Colors.red,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          floatingLabelStyle: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
       home: const WelcomeScreen(),
     );

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/screens/sign_up_screen.dart';
 import 'package:musicee_app/screens/sign_in_screen.dart';
+import 'package:musicee_app/utils/asset_manager.dart';
 
-import '../utils/app_colors.dart';
+import '../utils/color_manager.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -18,11 +19,10 @@ class WelcomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Image.asset(
-                'assets/img/app-logo3.png',
+                AssetManager.logoWelcomeScreen,
                 width: 300,
                 height: 300,
               ),
-              const SizedBox(height: 0),
               const Text(
                 'Your gateway to a world of music!',
                 textAlign: TextAlign.center,
@@ -43,7 +43,6 @@ class WelcomeScreen extends StatelessWidget {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.colorPrimary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50),
                     ),
@@ -67,7 +66,7 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                     side: const BorderSide(
                       width: 2,
-                      color: AppColors.colorPrimary,
+                      color: ColorManager.colorPrimary,
                     ),
                   ),
                   child: const Text('Sign In'),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../utils/app_colors.dart';
+import 'package:musicee_app/utils/theme_manager.dart';
+import '../utils/color_manager.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -20,6 +20,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _emailFocus = FocusNode();
   final _passwordFocus = FocusNode();
 
+  bool _hidePassword = true;
+  bool _showError = false;
+
+  // Email input validation
+  bool _isValidEmail(String input) {
+    final RegExp emailRegex = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+    );
+    return emailRegex.hasMatch(input);
+  }
+
   // Validation function
   bool _validateInputs() {
     if (_usernameController.text.isEmpty) {
@@ -30,6 +41,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
     } else if (_emailController.text.isEmpty) {
       setState(() {
         _emailFocus.requestFocus();
+      });
+      return false;
+    } else if (!_isValidEmail(_emailController.text)) {
+      setState(() {
+        _showError = true;
       });
       return false;
     } else if (_passwordController.text.isEmpty) {
@@ -55,98 +71,107 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              const Text(
-                'Create Your Account',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.colorPrimary,
-                ),
-              ),
-              const SizedBox(height: 64),
-              TextFormField(
-                controller: _usernameController,
-                focusNode: _usernameFocus,
-                decoration: InputDecoration(
-                  labelText: 'Username',
-                  icon: const Icon(Icons.person),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: _usernameController.text.isEmpty
-                          ? Colors.red
-                          : AppColors.swatchPrimary.shade700,
-                    ),
-                    borderRadius: BorderRadius.circular(10),
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: Scaffold(
+        //resizeToAvoidBottomInset: false,
+        appBar: AppBar(),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'Create Your Account',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 35,
+                    fontWeight: FontWeight.bold,
+                    color: ColorManager.swatchPrimary.shade700,
                   ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _emailController,
-                focusNode: _emailFocus,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  icon: const Icon(Icons.email),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: _emailController.text.isEmpty
-                          ? Colors.red
-                          : AppColors.swatchPrimary.shade700,
-                    ),
-                    borderRadius: BorderRadius.circular(10),
+                const SizedBox(height: 64),
+                TextFormField(
+                  controller: _usernameController,
+                  focusNode: _usernameFocus,
+                  decoration: InputDecoration(
+                    labelText: 'Username',
+                    icon: const Icon(Icons.person),
+                    border: ThemeManager.buildFormOutline(_usernameController),
                   ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _passwordController,
-                focusNode: _passwordFocus,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  icon: const Icon(Icons.lock),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: _passwordController.text.isEmpty
-                          ? Colors.red
-                          : AppColors.swatchPrimary.shade700,
-                    ),
-                    borderRadius: BorderRadius.circular(10),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _emailController,
+                  focusNode: _emailFocus,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    errorText: _showError
+                        ? 'Please enter a valid email address!'
+                        : null,
+                    icon: const Icon(Icons.email),
+                    border: ThemeManager.buildFormOutline(_emailController),
                   ),
+                  keyboardType: TextInputType.emailAddress,
                 ),
-              ),
-              const SizedBox(height: 64),
-              SizedBox(
-                width: 400,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Validate inputs before submitting
-                    if (_validateInputs()) {
-                      // sign-up logic
-                      Navigator.pop(context);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _passwordController,
+                  focusNode: _passwordFocus,
+                  obscureText: _hidePassword,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    icon: const Icon(Icons.lock),
+                    border: ThemeManager.buildFormOutline(_passwordController),
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _hidePassword = !_hidePassword;
+                        });
+                      },
+                      icon: Icon(_hidePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility),
                     ),
                   ),
-                  child: const Text(
-                    'Create account',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                const Flexible(
+                  flex: 5,
+                  child: SizedBox(
+                    height: 45,
                   ),
                 ),
-              ),
-              const SizedBox(height: 48),
-            ],
+                SizedBox(
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (_validateInputs()) {
+                        // sign-up logic
+                        Navigator.pop(context);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                    ),
+                    child: const Text(
+                      'Create an account',
+                    ),
+                  ),
+                ),
+                const Flexible(
+                  flex: 2,
+                  child: SizedBox(
+                    height: 70,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
