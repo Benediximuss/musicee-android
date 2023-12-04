@@ -30,12 +30,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  toast: ^0.3.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   http: ^1.1.0
+  google_fonts: ^6.1.0
 
 dev_dependencies:
   flutter_test:
@@ -64,10 +64,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
 
   assets:
-    - assets/img/app-logo.png
-    - assets/img/app-logo2.png
-    - assets/img/app-logo3.png
-    - assets/img/albumart.jpg
+    - assets/img/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -94,10 +91,10 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
 
-  fonts:
-    - family: Roboto
-      fonts:
-        - asset: assets/fonts/Roboto-Regular.ttf
-    - family: Pixelart
-      fonts:
-        - asset: assets/fonts/PixellettersFull.ttf
+  # fonts:
+  #   - family: Roboto
+  #     fonts:
+  #       - asset: assets/fonts/Roboto-Regular.ttf
+  #   - family: Pixelart
+  #     fonts:
+  #       - asset: assets/fonts/PixellettersFull.ttf

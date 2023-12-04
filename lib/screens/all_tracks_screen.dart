@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:musicee_app/screens/objs/track.dart';
+import 'package:musicee_app/models/track.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:musicee_app/screens/song_detail_screen.dart';
+import 'package:musicee_app/utils/asset_manager.dart';
 
 class ListItemCard extends StatelessWidget {
   final Track track;
@@ -13,53 +14,54 @@ class ListItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SongDetailScreen(
-                title: track.trackName,
-                artist: track.trackArtist.join(', '),
-                imagePath: 'assets/img/albumart.jpg',
-              ),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SongDetailScreen(
+              title: track.trackName,
+              artist: track.trackArtist.join(', '),
+              imagePath: AssetManager.placeholderAlbumArt,
             ),
-          );
-        },
-        child: Card(
-          elevation: 3,
-          margin: const EdgeInsets.all(8),
-          child: ListTile(
-            leading: Container(
-              decoration: BoxDecoration(
-                color: Colors.black26,
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              alignment: Alignment.center,
-              width: 56, // Adjust the width as needed
-              child: const Icon(
-                Icons.music_note,
-                size: 36, // Adjust the size as needed
-              ),
-            ), // Musical note icon
-            title: Text(track.trackName,
-                style:
-                    const TextStyle(fontWeight: FontWeight.w600, fontSize: 24)),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 5),
-                Text('Artist: ${track.trackArtist.join(', ')}'),
-                const SizedBox(height: 5),
-                Text('Album: ${track.trackAlbum}'),
-                const SizedBox(height: 5),
-                Text('Release Year: ${track.trackReleaseYear}'),
-                const SizedBox(height: 5),
-                Text('Rating: ${track.trackRating}'),
-              ],
-            ),
-            // Add more customization here if needed
           ),
-        ));
+        );
+      },
+      child: Card(
+        elevation: 3,
+        margin: const EdgeInsets.all(8),
+        child: ListTile(
+          leading: Container(
+            decoration: BoxDecoration(
+              color: Colors.black26,
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            alignment: Alignment.center,
+            width: 56, // Adjust the width as needed
+            child: const Icon(
+              Icons.music_note,
+              size: 36, // Adjust the size as needed
+            ),
+          ), // Musical note icon
+          title: Text(track.trackName,
+              style:
+                  const TextStyle(fontWeight: FontWeight.w600, fontSize: 24)),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 5),
+              Text('Artist: ${track.trackArtist.join(', ')}'),
+              const SizedBox(height: 5),
+              Text('Album: ${track.trackAlbum}'),
+              const SizedBox(height: 5),
+              Text('Release Year: ${track.trackReleaseYear}'),
+              const SizedBox(height: 5),
+              Text('Rating: ${track.trackRating}'),
+            ],
+          ),
+          // Add more customization here if needed
+        ),
+      ),
+    );
   }
 }
 
@@ -109,12 +111,6 @@ class _AllTracksScreenState extends State<AllTracksScreen> {
     );
   }
 
-  void getContent() async {
-    print("3131: Fetcing!");
-    tracksList = await fetchData();
-    print("3131: Fetced!");
-  }
-
   Future<List<Track>> fetchData() async {
     try {
       final response = await http.get(
@@ -125,7 +121,7 @@ class _AllTracksScreenState extends State<AllTracksScreen> {
 
       if (response.statusCode == 200) {
         // Parse the JSON response
-        List<dynamic> jsonList = json.decode(response.body);
+        List<dynamic> jsonList = json.decode(utf8.decode(response.bodyBytes));
         return jsonList.map((json) => Track.fromJson(json)).toList();
       } else {
         throw Exception('Failed to load data');

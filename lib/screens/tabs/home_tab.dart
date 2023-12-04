@@ -1,8 +1,8 @@
-// home_tab.dart
 import 'package:flutter/material.dart';
 import 'package:musicee_app/screens/all_tracks_screen.dart';
-import 'package:musicee_app/screens/tabs/widgets/row_element.dart';
-import 'package:musicee_app/theme.dart';
+import 'package:musicee_app/widgets/row_element.dart';
+
+import '../../utils/color_manager.dart';
 
 class HomeTab extends StatelessWidget {
   const HomeTab({super.key});
@@ -10,7 +10,6 @@ class HomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.colorBG,
       body: Padding(
         padding: const EdgeInsets.only(left: 0.0, right: 0.0),
         child: Center(
@@ -25,11 +24,11 @@ class HomeTab extends StatelessWidget {
                     onPressed: () {
                        Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AllTracksScreen()),
+                        MaterialPageRoute(builder: (context) => const AllTracksScreen()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.colorPrimary,
+                      backgroundColor: ColorManager.colorPrimary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),

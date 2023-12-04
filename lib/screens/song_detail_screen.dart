@@ -1,8 +1,6 @@
-// song_detail_screen.dart
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
-import 'package:musicee_app/theme.dart';
+
+import '../utils/color_manager.dart';
 
 class SongDetailScreen extends StatelessWidget {
   final String title;
@@ -10,18 +8,17 @@ class SongDetailScreen extends StatelessWidget {
   final String imagePath;
 
   const SongDetailScreen(
-      {super.key, required this.title, required this.artist, required this.imagePath});
+      {super.key,
+      required this.title,
+      required this.artist,
+      required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Song Details',
-          style: TextStyle(
-            fontSize: 20,
-            color: AppColors.colorPrimaryText,
-          ),
         ),
       ),
       body: Center(
@@ -36,7 +33,7 @@ class SongDetailScreen extends StatelessWidget {
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 2,
                     blurRadius: 5,
-                    offset: Offset(0, 2), // changes the shadow direction
+                    offset: const Offset(0, 2), // changes the shadow direction
                   ),
                 ],
               ),
@@ -54,12 +51,13 @@ class SongDetailScreen extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
                 Text(
                   artist,
-                  style: TextStyle(fontSize: 20, color: Colors.grey),
+                  style: const TextStyle(fontSize: 20, color: Colors.grey),
                 ),
               ],
             ),
@@ -73,12 +71,12 @@ class SongDetailScreen extends StatelessWidget {
                     onPressed: () {
                       // RATE FUNCTIONALITY
                     },
-                    child: Text('Rate',
+                    child: const Text('Rate',
                         style: TextStyle(
-                            fontSize: 16, color: AppColors.colorPrimaryText)),
+                            fontSize: 16, color: ColorManager.colorAppBarText)),
                   ),
                 ),
-                SizedBox(width: 35),
+                const SizedBox(width: 35),
                 SizedBox(
                     width: 150,
                     height: 50,
@@ -86,9 +84,10 @@ class SongDetailScreen extends StatelessWidget {
                       onPressed: () {
                         // ADD TO LIST FUNCTIONALITY
                       },
-                      child: Text('Add to list',
+                      child: const Text('Add to list',
                           style: TextStyle(
-                              fontSize: 16, color: AppColors.colorPrimaryText)),
+                              fontSize: 16,
+                              color: ColorManager.colorAppBarText)),
                     )),
               ],
             )
