@@ -6,8 +6,6 @@ final class ColorManager {
 
   static const Color colorBG = Color.fromARGB(255, 253, 240, 240);
 
-  static const Color colorX = Color(0xFFE834DF);
-
   static const Color colorAppBarText = Color.fromARGB(170, 0, 0, 0);
 
   static const MaterialColor swatchPrimary = MaterialColor(
@@ -26,5 +24,4 @@ final class ColorManager {
     },
   );
 
-  Color ssss = Colors.red.shade200;
 }
