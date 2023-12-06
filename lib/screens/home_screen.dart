@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musicee_app/screens/tabs/home_tab.dart';
 import 'package:musicee_app/screens/tabs/profile_tab.dart';
 import 'package:musicee_app/screens/tabs/search_tab.dart';
+import 'package:musicee_app/services/auth/auth_manager.dart';
 
 import '../utils/color_manager.dart';
 
@@ -26,6 +27,22 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(
           _tabTitles[_currentIndex],
         ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              AuthManager.deleteToken();
+              Navigator.pop(context);
+            },
+            child: const Text(
+              "Log Out",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w400,
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ],
       ),
       body: PageView(
         controller: _pageController,

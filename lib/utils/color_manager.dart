@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 final class ColorManager {
+  const ColorManager._();
+
   static const Color colorPrimary = Color.fromARGB(255, 233, 142, 141);
   static const Color colorSecondary = Color.fromARGB(255, 151, 30, 28);
 
@@ -23,5 +25,4 @@ final class ColorManager {
       900: Color(0xFF7A3635),
     },
   );
-
 }

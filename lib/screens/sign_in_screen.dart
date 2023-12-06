@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:musicee_app/api/api_service.dart';
+import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/models/sign_in_model.dart';
 import 'package:musicee_app/screens/home_screen.dart';
+import 'package:musicee_app/services/auth/auth_manager.dart';
 import 'package:musicee_app/utils/theme_manager.dart';
+import 'package:musicee_app/widgets/loader_view.dart';
 import '../utils/color_manager.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -87,126 +89,111 @@ class _SignInScreenState extends State<SignInScreen> {
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
       },
-      child: Stack(
-        children: [
-          Scaffold(
-            appBar: AppBar(),
-            body: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      'Welcome Back!',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold,
-                        color: ColorManager.swatchPrimary.shade700,
-                      ),
+      child: LoaderView(
+        condition: _isLoading,
+        child: Scaffold(
+          appBar: AppBar(),
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'Welcome Back!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                      color: ColorManager.swatchPrimary.shade700,
                     ),
-                    // const SizedBox(height: 64),
-                    const Flexible(
-                      flex: 2,
-                      child: SizedBox(
-                        height: 100,
-                      ),
+                  ),
+                  const Flexible(
+                    flex: 2,
+                    child: SizedBox(
+                      height: 100,
                     ),
-                    TextFormField(
-                      controller: _emailController,
-                      focusNode: _emailFocus,
-                      decoration: InputDecoration(
-                        labelText: 'Email',
-                        errorText: _showEmailError
-                            ? 'Please enter a valid email address!'
-                            : null,
-                        errorStyle: const TextStyle(fontSize: 16),
-                        icon: const Icon(Icons.email),
-                        border: ThemeManager.buildFormOutline(_emailController),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
+                  ),
+                  TextFormField(
+                    controller: _emailController,
+                    focusNode: _emailFocus,
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      errorText: _showEmailError
+                          ? 'Please enter a valid email address!'
+                          : null,
+                      errorStyle: const TextStyle(fontSize: 16),
+                      icon: const Icon(Icons.email),
+                      border: ThemeManager.buildFormOutline(_emailController),
                     ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _passwordController,
-                      focusNode: _passwordFocus,
-                      obscureText: _hidePassword,
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        icon: const Icon(Icons.lock),
-                        border:
-                            ThemeManager.buildFormOutline(_passwordController),
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _hidePassword = !_hidePassword;
-                            });
-                          },
-                          icon: Icon(_hidePassword
-                              ? Icons.visibility_off
-                              : Icons.visibility),
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      flex: 5,
-                      child: Container(
-                        margin:
-                            const EdgeInsets.fromLTRB(50.0, 12.0, 0.0, 36.0),
-                        child: Visibility(
-                          visible: _loginFailed,
-                          child: Text(
-                            _errorMessage,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.red.shade700,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 50,
-                      child: ElevatedButton(
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _passwordController,
+                    focusNode: _passwordFocus,
+                    obscureText: _hidePassword,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      icon: const Icon(Icons.lock),
+                      border:
+                          ThemeManager.buildFormOutline(_passwordController),
+                      suffixIcon: IconButton(
                         onPressed: () {
-                          if (_validateInputs()) {
-                            _signInLogic();
-                          }
+                          setState(() {
+                            _hidePassword = !_hidePassword;
+                          });
                         },
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50),
+                        icon: Icon(_hidePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility),
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 5,
+                    child: Container(
+                      margin: const EdgeInsets.fromLTRB(50.0, 12.0, 0.0, 36.0),
+                      child: Visibility(
+                        visible: _loginFailed,
+                        child: Text(
+                          _errorMessage,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.red.shade700,
                           ),
                         ),
-                        child: const Text('Sign in'),
                       ),
                     ),
-                    const Flexible(
-                      flex: 2,
-                      child: SizedBox(
-                        height: 70,
+                  ),
+                  SizedBox(
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_validateInputs()) {
+                          _signInLogic();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
                       ),
+                      child: const Text('Sign in'),
                     ),
-                  ],
-                ),
+                  ),
+                  const Flexible(
+                    flex: 1,
+                    child: SizedBox(
+                      height: 70,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-          if (_isLoading)
-            const Opacity(
-              opacity: 0.8,
-              child: ModalBarrier(
-                dismissible: false,
-                color: Colors.black,
-              ),
-            ),
-          if (_isLoading)
-            const Center(
-              child: CircularProgressIndicator(),
-            ),
-        ],
+        ),
       ),
     );
   }
@@ -243,7 +230,9 @@ class _SignInScreenState extends State<SignInScreen> {
           //   _passwordController.clear();
           // });
 
-          Navigator.push(
+          AuthManager.setAccessToken(value.accessToken);
+
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const HomeScreen()),
           );

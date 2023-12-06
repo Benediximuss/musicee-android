@@ -3,6 +3,7 @@ import 'package:musicee_app/screens/sign_up_screen.dart';
 import 'package:musicee_app/screens/sign_in_screen.dart';
 import 'package:musicee_app/utils/asset_manager.dart';
 
+import '../services/auth/auth_manager.dart';
 import '../utils/color_manager.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -57,7 +58,7 @@ class WelcomeScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SignInScreen()),
+                      MaterialPageRoute(builder: (context) => const SignInScreen()),
                     );
                   },
                   style: OutlinedButton.styleFrom(
@@ -71,6 +72,13 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   child: const Text('Sign In'),
                 ),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                child: const Text('Check Token'),
+                onPressed: () {
+                  print(AuthManager.hasToken() ? 'Has token' : 'No token');
+                },
               ),
             ],
           ),

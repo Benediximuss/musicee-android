@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:musicee_app/api/api_endpoint_manager.dart';
+import 'package:musicee_app/services/api/api_endpoint_manager.dart';
 import 'package:musicee_app/models/sign_in_model.dart';
 import 'package:musicee_app/models/sign_up_model.dart';
 
 class APIService {
+  const APIService._();
 
   static Future<SignUpResponseModel> signup(SignUpRequestModel requestModel) async {
     String url = ApiEndpointManager.user(UserEndpoints.SIGNUP);

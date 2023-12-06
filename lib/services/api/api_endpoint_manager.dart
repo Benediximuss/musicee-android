@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 final class ApiEndpointManager {
+  const ApiEndpointManager._();
 
   static const baseUrl = 'http://musicee.us-west-2.elasticbeanstalk.com';
 
