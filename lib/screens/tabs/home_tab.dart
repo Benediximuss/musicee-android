@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:musicee_app/screens/all_tracks_screen.dart';
+import 'package:musicee_app/routes/routes.dart';
 import 'package:musicee_app/widgets/row_element.dart';
 
 import '../../utils/color_manager.dart';
@@ -22,10 +22,7 @@ class HomeTab extends StatelessWidget {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
-                       Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const AllTracksScreen()),
-                      );
+                       Navigator.pushNamed(context, Routes.allTracksScreen);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: ColorManager.colorPrimary,

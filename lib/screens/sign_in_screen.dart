@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musicee_app/routes/routes.dart';
 import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/models/sign_in_model.dart';
 import 'package:musicee_app/screens/home_screen.dart';
@@ -220,21 +221,12 @@ class _SignInScreenState extends State<SignInScreen> {
             _errorMessage = value.error;
           });
         } else {
-          // setState(() {
-          //   _hidePassword = true;
-          //   _showEmailError = false;
-          //   _loginFailed = false;
-          //   _isLoading = false;
-          //   _errorMessage = '';
-          //   _emailController.clear();
-          //   _passwordController.clear();
-          // });
-
           AuthManager.setAccessToken(value.accessToken);
 
-          Navigator.pushReplacement(
+          Navigator.pushNamedAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            Routes.homeScreen,
+            (route) => false,
           );
         }
       },

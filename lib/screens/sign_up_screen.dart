@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musicee_app/routes/routes.dart';
 import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/models/sign_up_model.dart';
 import 'package:musicee_app/utils/theme_manager.dart';
@@ -209,6 +210,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  void newMethod(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.black.withOpacity(0.8),
+      builder: (context) => const SignUpDialog(),
+    );
+  }
+
   void _signUpLogic() {
     setState(() {
       _isLoading = true;
@@ -232,16 +242,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             _errorMessage = 'Invalid username or email';
           });
         } else {
-          // setState(() {
-          //   _hidePassword = true;
-          //   _showEmailError = false;
-          //   _loginFailed = false;
-          //   _isLoading = false;
-          //   _errorMessage = '';
-          //   _emailController.clear();
-          //   _passwordController.clear();
-          // });
-
           showDialog(
             context: context,
             barrierDismissible: false,
@@ -292,8 +292,11 @@ class SignUpDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.pop(context);
-            Navigator.pop(context);
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              Routes.signinScreen,
+              ModalRoute.withName(Routes.welcomeScreen),
+            );
           },
           child: const DecoratedBox(
             decoration: BoxDecoration(

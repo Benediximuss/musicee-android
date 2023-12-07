@@ -8,6 +8,7 @@ class AuthManager {
 
   static Future<void> init() async {
     _accessToken = await SecureStorageManager.getValue(SecureStorageKeys.accessTokenKey);
+    print("3131: ${hasToken() ? "TOKEN YES" : "TOKEN NO"}");
   }
 
   static void setAccessToken(String token) {

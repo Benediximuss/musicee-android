@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:musicee_app/screens/song_detail_screen.dart';
+import 'package:musicee_app/routes/routes.dart';
 import 'package:musicee_app/utils/asset_manager.dart';
 
 import '../utils/color_manager.dart';
@@ -20,15 +20,24 @@ class SongCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => SongDetailScreen(
+        //       title: title,
+        //       artist: artist,
+        //       imagePath: imagePath,
+        //     ),
+        //   ),
+        // );
+        Navigator.pushNamed(
           context,
-          MaterialPageRoute(
-            builder: (context) => SongDetailScreen(
-              title: title,
-              artist: artist,
-              imagePath: imagePath,
-            ),
-          ),
+          Routes.songDetailsScreen,
+          arguments: {
+            'title': title,
+            'artist': artist,
+            'imagePath': imagePath,
+          },
         );
       },
       child: Container(

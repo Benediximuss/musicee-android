@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musicee_app/routes/routes.dart';
 import 'package:musicee_app/screens/tabs/home_tab.dart';
 import 'package:musicee_app/screens/tabs/profile_tab.dart';
 import 'package:musicee_app/screens/tabs/search_tab.dart';
@@ -31,7 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
           TextButton(
             onPressed: () {
               AuthManager.deleteToken();
-              Navigator.pop(context);
+              // Navigator.pushReplacementNamed(context, Routes.welcomeScreen);
+              Navigator.popAndPushNamed(context, Routes.welcomeScreen);
             },
             child: const Text(
               "Log Out",

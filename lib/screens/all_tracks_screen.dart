@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/models/track.dart';
 import 'package:http/http.dart' as http;
+import 'package:musicee_app/routes/routes.dart';
 import 'dart:convert';
 
 import 'package:musicee_app/screens/song_detail_screen.dart';
@@ -15,15 +16,24 @@ class ListItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => SongDetailScreen(
+        //       title: track.trackName,
+        //       artist: track.trackArtist.join(', '),
+        //       imagePath: AssetManager.placeholderAlbumArt,
+        //     ),
+        //   ),
+        // );
+        Navigator.pushNamed(
           context,
-          MaterialPageRoute(
-            builder: (context) => SongDetailScreen(
-              title: track.trackName,
-              artist: track.trackArtist.join(', '),
-              imagePath: AssetManager.placeholderAlbumArt,
-            ),
-          ),
+          Routes.songDetailsScreen,
+          arguments: {
+            'title': track.trackName,
+            'artist': track.trackArtist.join(', '),
+            'imagePath': AssetManager.placeholderAlbumArt,
+          },
         );
       },
       child: Card(
@@ -81,6 +91,28 @@ class _AllTracksScreenState extends State<AllTracksScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('All Songs'),
+        actions: [
+          ElevatedButton(
+            child: const Text(
+              'ZORT',
+              style: TextStyle(
+                color: Colors.amber,
+              ),
+            ),
+            onPressed: () {
+              Navigator.popUntil(context, (route) => false);
+              Navigator.pushNamed(
+                context,
+                Routes.songDetailsScreen,
+                arguments: {
+                  'title': 'zort',
+                  'artist': 'zart',
+                  'imagePath': 'port',
+                },
+              );
+            },
+          )
+        ],
       ),
       body: FutureBuilder(
         future: fetchData(),
