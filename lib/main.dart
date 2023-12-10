@@ -7,9 +7,8 @@ import 'package:musicee_app/utils/theme_manager.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await AuthManager.init();
-  AppRouter.initialRoute =
-      AuthManager.hasToken() ? Routes.homeScreen : Routes.welcomeScreen;
+  final bool isLogged = await AuthManager.init();
+  AppRouter.initialRoute = isLogged ? Routes.homeScreen : Routes.welcomeScreen;
 
   runApp(const MyApp());
 }

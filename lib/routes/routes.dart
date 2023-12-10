@@ -7,4 +7,9 @@ class Routes {
   static const homeScreen = 'home';
   static const allTracksScreen = 'allTracks';
   static const songDetailsScreen = 'songDetails';
+  static const userProfileScreen = 'userProfile';
+  static const userFriendsScreen = 'userFriends';
+  // userLikeds
+  static const addTrackScreen = 'addTrack';
+  
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:musicee_app/utils/color_manager.dart';
+import 'package:musicee_app/widgets/custom_loader_indicator.dart';
 
 class LoaderView extends StatelessWidget {
   final bool condition;
@@ -26,12 +25,7 @@ class LoaderView extends StatelessWidget {
             ),
           ),
         if (condition)
-          Center(
-            child: SpinKitPulsingGrid(
-              color: ColorManager.swatchPrimary.shade400,
-              size: 75.0,
-            ),
-          ),
+          const CustomLoaderIndicator(),
       ],
     );
   }

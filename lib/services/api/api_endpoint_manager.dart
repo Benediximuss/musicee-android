@@ -20,10 +20,19 @@ final class ApiEndpointManager {
     }
   }
 
+ static String users(UsersEndpoints endpoint, {String username = ''}) {
+    var path = '$baseUrl/users';
+    switch (endpoint) {
+      case UsersEndpoints.ALL: return '$path/all';
+      case UsersEndpoints.DETAILS: return '$path/get_user_details/$username';
+    }
+  }
+
   static String tracks(TracksEndpoints endpoint) {
     var path = '$baseUrl/tracks';
     switch (endpoint) {
       case TracksEndpoints.GET_TRACKS: return '$path/get_tracks';
+      case TracksEndpoints.ADD_TRACK: return '$path/add_track';
     }
   }
 
@@ -39,6 +48,12 @@ enum UserEndpoints {
   LOGIN,
 }
 
+enum UsersEndpoints {
+  ALL,
+  DETAILS,
+}
+
 enum TracksEndpoints {
   GET_TRACKS,
+  ADD_TRACK,
 }

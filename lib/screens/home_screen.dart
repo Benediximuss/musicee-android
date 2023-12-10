@@ -3,9 +3,7 @@ import 'package:musicee_app/routes/routes.dart';
 import 'package:musicee_app/screens/tabs/home_tab.dart';
 import 'package:musicee_app/screens/tabs/profile_tab.dart';
 import 'package:musicee_app/screens/tabs/search_tab.dart';
-import 'package:musicee_app/services/auth/auth_manager.dart';
-
-import '../utils/color_manager.dart';
+import 'package:musicee_app/utils/color_manager.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -28,20 +26,26 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(
           _tabTitles[_currentIndex],
         ),
+        leading: TextButton(
+          onPressed: () {
+            print("3131: REFRESH");
+            Navigator.pushNamedAndRemoveUntil(context, Routes.homeScreen, (route) => false);
+          },
+          child: const Icon(
+            Icons.refresh,
+            color: ColorManager.colorAppBarText,
+            size: 30,
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: () {
-              AuthManager.deleteToken();
-              // Navigator.pushReplacementNamed(context, Routes.welcomeScreen);
               Navigator.popAndPushNamed(context, Routes.welcomeScreen);
             },
-            child: const Text(
-              "Log Out",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w400,
-                fontSize: 16,
-              ),
+            child: const Icon(
+              Icons.logout,
+              color: ColorManager.colorAppBarText,
+              size: 30,
             ),
           ),
         ],
@@ -82,8 +86,8 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Search',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.library_music_rounded),
-            label: 'Library',
+            icon: Icon(Icons.person),
+            label: 'Profile',
           ),
         ],
       ),
@@ -99,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case 2:
         return const ProfileTab();
       default:
-        return Container(); // Handle other cases if needed
+        return Container();
     }
   }
 }

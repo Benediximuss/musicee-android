@@ -5,7 +5,10 @@ import 'package:musicee_app/screens/home_screen.dart';
 import 'package:musicee_app/screens/sign_up_screen.dart';
 import 'package:musicee_app/screens/sign_in_screen.dart';
 import 'package:musicee_app/screens/song_detail_screen.dart';
+import 'package:musicee_app/screens/user_friends_screen.dart';
+import 'package:musicee_app/screens/user_profile_screen.dart';
 import 'package:musicee_app/screens/welcome_screen.dart';
+import 'package:musicee_app/screens/add_track_screen.dart';
 
 class AppRouter {
   const AppRouter._();
@@ -14,6 +17,11 @@ class AppRouter {
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     print("3131: Pushed: ${settings.name ?? 'Null settings'}");
+    late Map<String, dynamic> arguments;
+
+    if (settings.arguments != null) {
+      arguments = settings.arguments as Map<String, dynamic>;
+    }
 
     switch (settings.name) {
       case Routes.welcomeScreen:
@@ -42,9 +50,6 @@ class AppRouter {
           settings: const RouteSettings(name: Routes.allTracksScreen),
         );
       case Routes.songDetailsScreen:
-        final Map<String, dynamic> arguments =
-            settings.arguments as Map<String, dynamic>;
-
         return MaterialPageRoute(
           builder: (_) => SongDetailScreen(
             title: arguments['title'],
@@ -53,7 +58,27 @@ class AppRouter {
           ),
           settings: const RouteSettings(name: Routes.songDetailsScreen),
         );
-
+      case Routes.userProfileScreen:
+        return MaterialPageRoute(
+          builder: (_) => UserProfileScreen(
+            showAppBar: arguments['showAppBar'],
+            username: arguments['username'],
+          ),
+          settings: const RouteSettings(name: Routes.userProfileScreen),
+        );
+      case Routes.userFriendsScreen:
+        return MaterialPageRoute(
+          builder: (_) => UserFriendsScreen(
+            username: arguments['username'],
+            friendsList: arguments['friendsList'],
+          ),
+          settings: const RouteSettings(name: Routes.userFriendsScreen),
+        );
+      case Routes.addTrackScreen:
+        return MaterialPageRoute(
+          builder: (_) => const AddTrackScreen(),
+          settings: const RouteSettings(name: Routes.addTrackScreen),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

@@ -22,7 +22,7 @@ class HomeTab extends StatelessWidget {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
-                       Navigator.pushNamed(context, Routes.allTracksScreen);
+                      Navigator.pushNamed(context, Routes.allTracksScreen);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: ColorManager.colorPrimary,
@@ -54,6 +54,22 @@ class HomeTab extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, Routes.addTrackScreen);
+        },
+        tooltip: 'Add song',
+        foregroundColor: ColorManager.colorAppBarText,
+        backgroundColor: ColorManager.colorPrimary,
+        elevation: 5,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16.0)),
+        ),
+        child: const Icon(
+          Icons.add_rounded,
+          size: 35,
         ),
       ),
     );

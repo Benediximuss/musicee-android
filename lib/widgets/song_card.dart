@@ -20,16 +20,6 @@ class SongCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => SongDetailScreen(
-        //       title: title,
-        //       artist: artist,
-        //       imagePath: imagePath,
-        //     ),
-        //   ),
-        // );
         Navigator.pushNamed(
           context,
           Routes.songDetailsScreen,

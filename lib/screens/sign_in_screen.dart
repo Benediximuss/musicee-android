@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/routes/routes.dart';
-import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/models/sign_in_model.dart';
-import 'package:musicee_app/screens/home_screen.dart';
 import 'package:musicee_app/services/auth/auth_manager.dart';
 import 'package:musicee_app/utils/theme_manager.dart';
 import 'package:musicee_app/widgets/loader_view.dart';
@@ -17,52 +15,31 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   // Controllers for form fields
-  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
   // Focus nodes for form fields
-  final _emailFocus = FocusNode();
+  final _usernameFocus = FocusNode();
   final _passwordFocus = FocusNode();
 
   // UI Logic
   bool _hidePassword = true;
-  bool _showEmailError = false;
   bool _loginFailed = false;
   bool _isLoading = false;
 
   String _errorMessage = '';
 
-  bool _isValidEmail(String input) {
-    final RegExp emailRegex = RegExp(
-      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-    );
-    return emailRegex.hasMatch(input);
-  }
-
   // Validation function
   bool _validateInputs() {
-    if (_emailController.text.isEmpty) {
+    if (_usernameController.text.isEmpty) {
       setState(() {
-        _emailFocus.requestFocus();
+        _usernameFocus.requestFocus();
       });
       return false;
-    }
-
-    if (!_isValidEmail(_emailController.text)) {
-      setState(() {
-        _showEmailError = true;
-        _emailFocus.requestFocus();
-      });
-      return false;
-    } else {
-      setState(() {
-        _showEmailError = false;
-      });
     }
 
     if (_passwordController.text.isEmpty) {
       setState(() {
-        _showEmailError == false;
         _passwordFocus.requestFocus();
       });
       return false;
@@ -77,9 +54,9 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   void dispose() {
     // Dispose controllers and focus nodes to avoid memory leaks
-    _emailController.dispose();
+    _usernameController.dispose();
     _passwordController.dispose();
-    _emailFocus.dispose();
+    _usernameFocus.dispose();
     _passwordFocus.dispose();
     super.dispose();
   }
@@ -117,18 +94,14 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ),
                   TextFormField(
-                    controller: _emailController,
-                    focusNode: _emailFocus,
+                    controller: _usernameController,
+                    focusNode: _usernameFocus,
                     decoration: InputDecoration(
-                      labelText: 'Email',
-                      errorText: _showEmailError
-                          ? 'Please enter a valid email address!'
-                          : null,
-                      errorStyle: const TextStyle(fontSize: 16),
-                      icon: const Icon(Icons.email),
-                      border: ThemeManager.buildFormOutline(_emailController),
+                      labelText: 'Username',
+                      icon: const Icon(Icons.person),
+                      border:
+                          ThemeManager.buildFormOutline(_usernameController),
                     ),
-                    keyboardType: TextInputType.emailAddress,
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
@@ -205,24 +178,22 @@ class _SignInScreenState extends State<SignInScreen> {
     });
 
     final requestModel = SignInRequestModel(
-      email: _emailController.text,
+      username: _usernameController.text,
       password: _passwordController.text,
     );
 
-    APIService.login(requestModel).then(
-      (value) {
+    AuthManager.login(requestModel).then(
+      (response) {
         setState(() {
           _isLoading = false;
         });
 
-        if (value.error.isNotEmpty) {
+        if (response.error.isNotEmpty) {
           setState(() {
             _loginFailed = true;
-            _errorMessage = value.error;
+            _errorMessage = response.error;
           });
         } else {
-          AuthManager.setAccessToken(value.accessToken);
-
           Navigator.pushNamedAndRemoveUntil(
             context,
             Routes.homeScreen,

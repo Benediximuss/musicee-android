@@ -7,6 +7,8 @@ class SongDetailScreen extends StatelessWidget {
   final String artist;
   final String imagePath;
 
+  final String trackID = '163BSLhb';
+
   const SongDetailScreen(
       {super.key,
       required this.title,

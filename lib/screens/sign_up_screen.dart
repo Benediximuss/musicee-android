@@ -210,15 +210,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  void newMethod(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      barrierColor: Colors.black.withOpacity(0.8),
-      builder: (context) => const SignUpDialog(),
-    );
-  }
-
   void _signUpLogic() {
     setState(() {
       _isLoading = true;
@@ -301,7 +292,7 @@ class SignUpDialog extends StatelessWidget {
           child: const DecoratedBox(
             decoration: BoxDecoration(
               color: ColorManager.colorPrimary,
-              borderRadius: BorderRadius.all(Radius.circular(15.0)),
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
             ),
             child: Padding(
               padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),

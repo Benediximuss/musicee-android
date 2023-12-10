@@ -27,19 +27,17 @@ class SignInResponseModel {
 }
 
 class SignInRequestModel {
-  String username = 'nothing';
-  String email;
+  String username;
   String password;
 
   SignInRequestModel({
-    required this.email,
+    required this.username,
     required this.password,
   });
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
       'username': username.trim(),
-      'email': email.trim(),
       'password': password.trim(),
     };
     return map;
