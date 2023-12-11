@@ -28,11 +28,14 @@ final class ApiEndpointManager {
     }
   }
 
-  static String tracks(TracksEndpoints endpoint) {
+  static String tracks(TracksEndpoints endpoint, {String trackID = ''}) {
     var path = '$baseUrl/tracks';
     switch (endpoint) {
       case TracksEndpoints.GET_TRACKS: return '$path/get_tracks';
+      case TracksEndpoints.GET_TRACK_DETAILS: return '$path/get_track_details';
       case TracksEndpoints.ADD_TRACK: return '$path/add_track';
+      case TracksEndpoints.UPDATE_TRACK: return '$path/update_track/$trackID';
+      case TracksEndpoints.DELETE_TRACK: return '$path/delete_track/$trackID';
     }
   }
 
@@ -55,5 +58,8 @@ enum UsersEndpoints {
 
 enum TracksEndpoints {
   GET_TRACKS,
+  GET_TRACK_DETAILS,
   ADD_TRACK,
+  UPDATE_TRACK,
+  DELETE_TRACK,
 }

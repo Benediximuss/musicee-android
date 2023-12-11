@@ -25,7 +25,8 @@ class APIService {
             SignUpResponseModel.fromJson(json.decode(response.body));
         return returnval;
       } else {
-        throw Exception('An error occured, try again');
+        throw Exception(
+            'Failed to get data from server (Status code: ${response.statusCode})');
       }
     } catch (error) {
       return Future.error(error);
@@ -48,7 +49,8 @@ class APIService {
             SignInResponseModel.fromJson(json.decode(response.body));
         return returnval;
       } else {
-        throw Exception('An error occured, try again');
+        throw Exception(
+            'Failed to get data from server (Status code: ${response.statusCode})');
       }
     } catch (error) {
       return Future.error(error);
@@ -67,7 +69,8 @@ class APIService {
             jsonList.map((json) => UserDetailModel.fromJson(json)).toList();
         return returnval;
       } else {
-        throw Exception('Failed to load data!');
+        throw Exception(
+            'Failed to get data from server (Status code: ${response.statusCode})');
       }
     } catch (error) {
       return Future.error(error);
@@ -87,7 +90,8 @@ class APIService {
         var returnval = UserDetailModel.fromJson(json.decode(response.body));
         return returnval;
       } else {
-        throw Exception('Failed to load data!');
+        throw Exception(
+            'Failed to get data from server (Status code: ${response.statusCode})');
       }
     } catch (error) {
       return Future.error(error);
@@ -107,7 +111,28 @@ class APIService {
             jsonList.map((json) => TrackModel.fromJson(json)).toList();
         return returnval;
       } else {
-        throw Exception('Failed to load data!');
+        throw Exception(
+            'Failed to get data from server (Status code: ${response.statusCode})');
+      }
+    } catch (error) {
+      return Future.error(error);
+    }
+  }
+
+  static Future<TrackModel> getTrackDetails(String trackID) async {
+    String url = ApiEndpointManager.tracks(TracksEndpoints.GET_TRACK_DETAILS);
+
+    try {
+      final response = await http
+          .post(Uri.parse(url).replace(queryParameters: {'track_id': trackID}));
+
+      if (response.statusCode == 200) {
+        var returnval =
+            TrackModel.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+        return returnval;
+      } else {
+        throw Exception(
+            'Failed to get data from server (Status code: ${response.statusCode})');
       }
     } catch (error) {
       return Future.error(error);
@@ -128,7 +153,56 @@ class APIService {
         String returnval = json.decode(response.body)['track_id'];
         return returnval;
       } else {
-        throw Exception('An error occured, try again');
+        throw Exception(
+            'Failed to get data from server (Status code: ${response.statusCode})');
+      }
+    } catch (error) {
+      return Future.error(error);
+    }
+  }
+
+  static Future<String> updateTrack(
+      String trackID, TrackModel requestModel) async {
+    String url = ApiEndpointManager.tracks(
+      TracksEndpoints.UPDATE_TRACK,
+      trackID: trackID,
+    );
+
+    try {
+      final response = await http.put(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(requestModel.toJson()),
+      );
+
+      if (response.statusCode == 200) {
+        return trackID;
+      } else {
+        throw Exception(
+            'Failed to get data from server (Status code: ${response.statusCode})');
+      }
+    } catch (error) {
+      return Future.error(error);
+    }
+  }
+
+  static Future<dynamic> deleteTrack(String trackID) async {
+    String url = ApiEndpointManager.tracks(
+      TracksEndpoints.DELETE_TRACK,
+      trackID: trackID,
+    );
+
+    try {
+      final response = await http.delete(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        return;
+      } else {
+        throw Exception(
+            'Failed to get data from server (Status code: ${response.statusCode})');
       }
     } catch (error) {
       return Future.error(error);

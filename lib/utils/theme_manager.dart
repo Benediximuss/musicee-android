@@ -9,13 +9,17 @@ final class ThemeManager {
     scaffoldBackgroundColor: ColorManager.colorBG,
     textTheme: GoogleFonts.robotoCondensedTextTheme(),
     appBarTheme: AppBarTheme(
-        titleTextStyle: GoogleFonts.robotoCondensed(
-          color: ColorManager.colorAppBarText,
-          fontSize: 25,
-        ),
-        iconTheme: const IconThemeData(
-          color: ColorManager.colorAppBarText,
-        )),
+      titleTextStyle: GoogleFonts.robotoCondensed(
+        color: ColorManager.colorAppBarText,
+        fontSize: 25,
+      ),
+      iconTheme: const IconThemeData(
+        color: ColorManager.colorAppBarText,
+      ),
+      actionsIconTheme: const IconThemeData(
+        color: ColorManager.colorAppBarText,
+      ),
+    ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.white,

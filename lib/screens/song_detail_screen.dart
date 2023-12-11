@@ -1,101 +1,152 @@
 import 'package:flutter/material.dart';
+import 'package:musicee_app/models/track_model.dart';
+import 'package:musicee_app/routes/routes.dart';
+import 'package:musicee_app/services/api/api_service.dart';
+import 'package:musicee_app/utils/asset_manager.dart';
+import 'package:musicee_app/widgets/delete_confirm_dialog.dart';
+import 'package:musicee_app/widgets/future_builder_with_loader.dart';
+import 'package:musicee_app/widgets/loader_view.dart';
 
-import '../utils/color_manager.dart';
+class SongDetailScreen extends StatefulWidget {
+  final String trackID;
 
-class SongDetailScreen extends StatelessWidget {
-  final String title;
-  final String artist;
-  final String imagePath;
+  const SongDetailScreen({Key? key, required this.trackID}) : super(key: key);
 
-  final String trackID = '163BSLhb';
+  @override
+  _SongDetailScreenState createState() => _SongDetailScreenState();
+}
 
-  const SongDetailScreen(
-      {super.key,
-      required this.title,
-      required this.artist,
-      required this.imagePath});
+class _SongDetailScreenState extends State<SongDetailScreen> {
+  late TrackModel _trackDetails;
+
+  late Future<TrackModel> _futureModel;
+
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _futureModel = updateAndGetList();
+  }
+
+  Future<TrackModel> updateAndGetList() async {
+    return APIService.getTrackDetails(widget.trackID);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Song Details',
+    return LoaderView(
+      condition: _isLoading,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Song Details',
+          ),
         ),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: const Offset(0, 2), // changes the shadow direction
+        body: FutureBuilderWithLoader(
+          future: _futureModel,
+          onComplete: (snapshot) {
+            _trackDetails = snapshot.data;
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10.0),
-                child: Image.asset(
-                  imagePath,
-                  width: 250,
-                  height: 250,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Column(
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 50),
-                Text(
-                  artist,
-                  style: const TextStyle(fontSize: 20, color: Colors.grey),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 100,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // RATE FUNCTIONALITY
-                    },
-                    child: const Text('Rate',
-                        style: TextStyle(
-                            fontSize: 16, color: ColorManager.colorAppBarText)),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image.asset(
+                      AssetManager.placeholderAlbumArt,
+                      width: 250,
+                      height: 250,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-                const SizedBox(width: 35),
-                SizedBox(
-                    width: 150,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // ADD TO LIST FUNCTIONALITY
-                      },
-                      child: const Text('Add to list',
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: ColorManager.colorAppBarText)),
-                    )),
+                Column(
+                  children: [
+                    Text(
+                      _trackDetails.trackName,
+                      style: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 50),
+                    Text(
+                      _trackDetails.trackArtist.join(', '),
+                      style: const TextStyle(fontSize: 20, color: Colors.grey),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 100,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            Routes.updateTrackScreen,
+                            arguments: {
+                              'trackID': widget.trackID,
+                            },
+                          );
+                        },
+                        child: const Text('Update'),
+                      ),
+                    ),
+                    const SizedBox(width: 30),
+                    SizedBox(
+                      width: 100,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _deleteLogic(context);
+                        },
+                        child: const Text('Delete'),
+                      ),
+                    ),
+                  ],
+                ),
               ],
-            )
-          ],
+            );
+          },
         ),
       ),
     );
+  }
+
+  void _deleteLogic(final context) async {
+    if (await deleteConfirmDialog(context)) {
+      setState(() {
+        _isLoading = true;
+      });
+      APIService.deleteTrack(widget.trackID).then((value) {
+        setState(() {
+          _isLoading = false;
+        });
+        if (value != null) {
+          print("3131: ZORTZORT OLDU");
+        } else {
+          Navigator.pop(context);
+        }
+      }).catchError((error) {
+        setState(() {
+          _isLoading = false;
+        });
+        print("3131: Error deleting!!! $error");
+      });
+    }
   }
 }

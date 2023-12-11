@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/models/track_model.dart';
 import 'package:musicee_app/routes/routes.dart';
-import 'package:musicee_app/utils/asset_manager.dart';
 import 'package:musicee_app/utils/color_manager.dart';
 
 class ListItemCard extends StatelessWidget {
   final TrackModel trackDetails;
+  final void Function() refreshListScreen;
 
-  const ListItemCard({Key? key, required this.trackDetails}) : super(key: key);
+  const ListItemCard({
+    Key? key,
+    required this.trackDetails,
+    required this.refreshListScreen,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +21,11 @@ class ListItemCard extends StatelessWidget {
           context,
           Routes.songDetailsScreen,
           arguments: {
-            'title': trackDetails.trackName,
-            'artist': trackDetails.trackArtist.join(', '),
-            'imagePath': AssetManager.placeholderAlbumArt,
+            'trackID': trackDetails.trackId,
           },
-        );
+        ).then((_) {
+          refreshListScreen();
+        });
       },
       child: Card(
         elevation: 3,
@@ -115,15 +119,23 @@ RichText songFieldText({required String label, required String value}) {
 
 class TrackListView extends StatelessWidget {
   final List<TrackModel> tracksList;
+  final void Function() refreshListScreen;
 
-  const TrackListView({Key? key, required this.tracksList}) : super(key: key);
+  const TrackListView({
+    Key? key,
+    required this.tracksList,
+    required this.refreshListScreen,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: tracksList.length,
       itemBuilder: (context, index) {
-        return ListItemCard(trackDetails: tracksList[index]);
+        return ListItemCard(
+          trackDetails: tracksList[index],
+          refreshListScreen: refreshListScreen,
+        );
       },
     );
   }

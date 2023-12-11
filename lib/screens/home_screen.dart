@@ -29,7 +29,8 @@ class _HomeScreenState extends State<HomeScreen> {
         leading: TextButton(
           onPressed: () {
             print("3131: REFRESH");
-            Navigator.pushNamedAndRemoveUntil(context, Routes.homeScreen, (route) => false);
+            //Navigator.pushNamedAndRemoveUntil(context, Routes.homeScreen, (route) => false);
+            Navigator.pushReplacementNamed(context, Routes.homeScreen);
           },
           child: const Icon(
             Icons.refresh,

@@ -22,12 +22,21 @@ class FutureBuilderWithLoader extends StatelessWidget {
           return Center(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Error loading data:\n${snapshot.error}',
-                style: const TextStyle(
-                  fontSize: 24,
-                ),
-              ),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.error,
+                      size: 100,
+                    ),
+                    const SizedBox(height: 40),
+                    Text(
+                      'Error loading data:\n${snapshot.error}',
+                      style: const TextStyle(
+                        fontSize: 24,
+                      ),
+                    ),
+                  ]),
             ),
           );
         } else {

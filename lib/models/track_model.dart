@@ -6,7 +6,6 @@ class TrackModel {
   int trackReleaseYear;
   int? trackRating;
   List<String>? likeList;
-  List<String>? unlikeList;
 
   TrackModel({
     this.trackId = 'id',
@@ -16,7 +15,6 @@ class TrackModel {
     required this.trackReleaseYear,
     this.trackRating,
     this.likeList,
-    this.unlikeList,
   });
 
   // Factory method to create a Track object from a map
@@ -28,15 +26,14 @@ class TrackModel {
       trackAlbum: json['track_album'],
       trackReleaseYear: json['track_release_year'],
       likeList: List<String>.from(json['like_list']),
-      unlikeList: List<String>.from(json['unlike_list']),
     );
   }
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
       'track_name': trackName.trim(),
-      'track_artist': trackArtist,
-      'track_album': trackAlbum,
+      'track_artist': trackArtist.map((artist) => artist.trim()).toList(),
+      'track_album': trackAlbum.trim(),
       'track_release_year': trackReleaseYear,
     };
     return map;

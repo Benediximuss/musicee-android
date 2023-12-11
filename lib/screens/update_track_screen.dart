@@ -1,25 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/models/track_model.dart';
 import 'package:musicee_app/services/api/api_service.dart';
+import 'package:musicee_app/widgets/future_builder_with_loader.dart';
 import 'package:musicee_app/widgets/track_input_view.dart';
 
-class AddTrackScreen extends StatelessWidget {
-  const AddTrackScreen({Key? key}) : super(key: key);
+class UpdateTrackScreen extends StatelessWidget {
+  const UpdateTrackScreen({Key? key, required this.trackID}) : super(key: key);
+
+  final String trackID;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add a song'),
+        title: const Text('Update a song'),
       ),
-      body: TrackInputView(
-        inputType: InputTypes.ADD,
-        apiFunction: _addSongLogic,
+      body: FutureBuilderWithLoader(
+        future: APIService.getTrackDetails(trackID),
+        onComplete: (snapshot) {
+          return TrackInputView(
+            inputType: InputTypes.UPDATE,
+            apiFunction: _updateSongLogic,
+            trackModel: snapshot.data,
+          );
+        },
       ),
     );
   }
 
-  void _addSongLogic({
+  void _updateSongLogic({
     required TrackModel requestModel,
     required Function() beforeRequest,
     required Function(String) thenRequest,
@@ -27,7 +36,7 @@ class AddTrackScreen extends StatelessWidget {
   }) {
     beforeRequest();
 
-    APIService.addTrack(requestModel).then(
+    APIService.updateTrack(trackID, requestModel).then(
       (response) {
         thenRequest(response);
       },

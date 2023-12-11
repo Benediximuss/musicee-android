@@ -5,6 +5,7 @@ import 'package:musicee_app/screens/home_screen.dart';
 import 'package:musicee_app/screens/sign_up_screen.dart';
 import 'package:musicee_app/screens/sign_in_screen.dart';
 import 'package:musicee_app/screens/song_detail_screen.dart';
+import 'package:musicee_app/screens/update_track_screen.dart';
 import 'package:musicee_app/screens/user_friends_screen.dart';
 import 'package:musicee_app/screens/user_profile_screen.dart';
 import 'package:musicee_app/screens/welcome_screen.dart';
@@ -52,9 +53,7 @@ class AppRouter {
       case Routes.songDetailsScreen:
         return MaterialPageRoute(
           builder: (_) => SongDetailScreen(
-            title: arguments['title'],
-            artist: arguments['artist'],
-            imagePath: arguments['imagePath'],
+            trackID: arguments['trackID'],
           ),
           settings: const RouteSettings(name: Routes.songDetailsScreen),
         );
@@ -78,6 +77,13 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => const AddTrackScreen(),
           settings: const RouteSettings(name: Routes.addTrackScreen),
+        );
+      case Routes.updateTrackScreen:
+        return MaterialPageRoute(
+          builder: (_) => UpdateTrackScreen(
+            trackID: arguments['trackID'],
+          ),
+          settings: const RouteSettings(name: Routes.updateTrackScreen),
         );
       default:
         return MaterialPageRoute(
