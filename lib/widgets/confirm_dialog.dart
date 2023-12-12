@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
-Future<bool> deleteConfirmDialog(final context) async {
+Future<bool> confirmDialog({
+  required final context,
+  required String warningText,
+  required String actionButtonText,
+}) async {
   bool? val = await showDialog<bool>(
     barrierColor: Colors.black.withOpacity(0.8),
     barrierDismissible: true,
@@ -10,11 +14,11 @@ Future<bool> deleteConfirmDialog(final context) async {
         Icons.warning_rounded,
         size: 75,
       ),
-      content: const SingleChildScrollView(
+      content: SingleChildScrollView(
         child: Text(
-          'Are you sure?',
+          warningText,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 24,
           ),
         ),
@@ -42,9 +46,9 @@ Future<bool> deleteConfirmDialog(final context) async {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red.shade400,
             ),
-            child: const Text(
-              'Delete',
-              style: TextStyle(
+            child: Text(
+              actionButtonText,
+              style: const TextStyle(
                 fontSize: 24,
               ),
             ),

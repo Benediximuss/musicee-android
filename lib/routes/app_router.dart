@@ -7,6 +7,7 @@ import 'package:musicee_app/screens/sign_in_screen.dart';
 import 'package:musicee_app/screens/song_detail_screen.dart';
 import 'package:musicee_app/screens/update_track_screen.dart';
 import 'package:musicee_app/screens/user_friends_screen.dart';
+import 'package:musicee_app/screens/user_likes_screen.dart';
 import 'package:musicee_app/screens/user_profile_screen.dart';
 import 'package:musicee_app/screens/welcome_screen.dart';
 import 'package:musicee_app/screens/add_track_screen.dart';
@@ -72,6 +73,13 @@ class AppRouter {
             friendsList: arguments['friendsList'],
           ),
           settings: const RouteSettings(name: Routes.userFriendsScreen),
+        );
+      case Routes.userLikesScreen:
+        return MaterialPageRoute(
+          builder: (_) => UserLikesScreen(
+            username: arguments['username'],
+          ),
+          settings: const RouteSettings(name: Routes.userLikesScreen),
         );
       case Routes.addTrackScreen:
         return MaterialPageRoute(

@@ -32,12 +32,14 @@ class _TrackInputViewState extends State<TrackInputView> {
   final List<TextEditingController> _artistNameControllers = [];
   final _albumNameController = TextEditingController();
   final _trackYearController = TextEditingController();
+  final _genreController = TextEditingController();
 
   // Focus nodes for form fields
   final _trackNameFocus = FocusNode();
   final List<FocusNode> _artistNameFocuses = [];
   final _albumNameFocus = FocusNode();
   final _trackYearFocus = FocusNode();
+  final _genreFocus = FocusNode();
 
   // UI Logic
   bool _isLoading = false;
@@ -77,6 +79,13 @@ class _TrackInputViewState extends State<TrackInputView> {
         _trackYearFocus.requestFocus();
       });
       return false;
+    }
+
+    if (_genreController.text.isEmpty) {
+      setState(() {
+        _genreFocus.requestFocus();
+      });
+      return false;
     } else {
       setState(() {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -114,6 +123,7 @@ class _TrackInputViewState extends State<TrackInputView> {
     if (widget.inputType == InputTypes.UPDATE) {
       _trackNameController.text = widget.trackModel!.trackName;
       _albumNameController.text = widget.trackModel!.trackAlbum;
+      _genreController.text = widget.trackModel!.genre!;
       _trackYearController.text =
           widget.trackModel!.trackReleaseYear.toString();
       List<String> artists = widget.trackModel!.trackArtist;
@@ -144,7 +154,7 @@ class _TrackInputViewState extends State<TrackInputView> {
               // crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _songFieldInput(
-                  label: 'Song Name',
+                  label: 'Title',
                   icon: Icons.music_note_rounded,
                   controller: _trackNameController,
                   focus: _trackNameFocus,
@@ -159,7 +169,7 @@ class _TrackInputViewState extends State<TrackInputView> {
                   },
                 ),
                 _songFieldInput(
-                  label: 'Album Name',
+                  label: 'Album',
                   icon: Icons.album_rounded,
                   controller: _albumNameController,
                   focus: _albumNameFocus,
@@ -168,17 +178,24 @@ class _TrackInputViewState extends State<TrackInputView> {
                 Row(
                   children: [
                     Expanded(
+                      flex: 7,
                       child: _songFieldInput(
-                        label: 'Release Year',
-                        icon: Icons.calendar_month,
+                        label: 'Genre',
+                        icon: Icons.library_music_rounded,
+                        controller: _genreController,
+                        focus: _genreFocus,
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    Expanded(
+                      flex: 4,
+                      child: _songFieldInput(
+                        label: 'Year',
+                        icon: Icons.calendar_month_rounded,
                         controller: _trackYearController,
                         focus: _trackYearFocus,
                         inputType: TextInputType.datetime,
                       ),
-                    ),
-                    const SizedBox(width: 30),
-                    Expanded(
-                      child: Container(),
                     ),
                   ],
                 ),
@@ -210,6 +227,7 @@ class _TrackInputViewState extends State<TrackInputView> {
                                 .map((controller) => controller.text)
                                 .toList(),
                             trackAlbum: _albumNameController.text,
+                            genre: _genreController.text,
                             trackReleaseYear:
                                 int.parse(_trackYearController.text),
                           ),
@@ -230,7 +248,7 @@ class _TrackInputViewState extends State<TrackInputView> {
                               barrierColor: Colors.black.withOpacity(0.8),
                               builder: (context) => AddTrackDialog(
                                 trackID: response,
-                                inputType: InputTypes.UPDATE,
+                                inputType: widget.inputType,
                               ),
                             );
                           },
@@ -405,12 +423,11 @@ class AddTrackDialog extends StatelessWidget {
                 context,
                 ModalRoute.withName(Routes.songDetailsScreen),
               );
+
               Navigator.pushReplacementNamed(
                 context,
                 Routes.songDetailsScreen,
-                arguments: {
-                  "trackID": trackID,
-                },
+                arguments: {'trackID': trackID},
               );
             }
           },

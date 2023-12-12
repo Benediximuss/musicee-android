@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/routes/routes.dart';
-import 'package:musicee_app/screens/tabs/home_tab.dart';
+import 'package:musicee_app/screens/tabs/explore_tab.dart';
 import 'package:musicee_app/screens/tabs/profile_tab.dart';
-import 'package:musicee_app/screens/tabs/search_tab.dart';
+import 'package:musicee_app/screens/tabs/people_tab.dart';
 import 'package:musicee_app/utils/color_manager.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,7 +15,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final PageController _pageController = PageController(initialPage: 0);
   int _currentIndex = 0;
-  final List<String> _tabTitles = ['Explore', 'Search', 'Profile'];
+  final List<String> _tabTitles = ['Explore', 'People', 'Profile'];
+  RefreshHolder refreshHolder = RefreshHolder();
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,18 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () {
             print("3131: REFRESH");
             //Navigator.pushNamedAndRemoveUntil(context, Routes.homeScreen, (route) => false);
-            Navigator.pushReplacementNamed(context, Routes.homeScreen);
+            //Navigator.pushReplacementNamed(context, Routes.homeScreen);
+
+            switch (_currentIndex) {
+              case 0:
+                refreshHolder.tab1Refresh!();
+              case 1:
+                refreshHolder.tab2Refresh!();
+              case 2:
+                refreshHolder.tab3Refresh!();
+              default:
+                return;
+            }
           },
           child: const Icon(
             Icons.refresh,
@@ -83,14 +95,20 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Explore',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
+            icon: Icon(Icons.groups_2),
+            label: 'People',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
           ),
         ],
+        selectedLabelStyle: const TextStyle(
+          fontSize: 18,
+        ),
+        unselectedLabelStyle: const TextStyle(
+          fontSize: 16,
+        ),
       ),
     );
   }
@@ -98,13 +116,19 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildTabContent(int index) {
     switch (index) {
       case 0:
-        return const HomeTab();
+        return ExploreTab(parentRefreshHolder: refreshHolder);
       case 1:
-        return const SearchTab();
+        return PeopleTab(parentRefreshHolder: refreshHolder);
       case 2:
-        return const ProfileTab();
+        return ProfileTab(parentRefreshHolder: refreshHolder);
       default:
         return Container();
     }
   }
+}
+
+class RefreshHolder {
+  late void Function()? tab1Refresh;
+  late void Function()? tab2Refresh;
+  late void Function()? tab3Refresh;
 }

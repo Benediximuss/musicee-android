@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/models/user_detail_model.dart';
 import 'package:musicee_app/routes/routes.dart';
-import 'package:musicee_app/screens/user_friends_screen.dart';
 import 'package:musicee_app/services/api/api_service.dart';
+import 'package:musicee_app/services/auth/auth_manager.dart';
+import 'package:musicee_app/widgets/add_friend_button.dart';
+import 'package:musicee_app/widgets/custom_icon_button.dart';
 import 'package:musicee_app/widgets/future_builder_with_loader.dart';
 
 class UserProfileScreen extends StatefulWidget {
@@ -20,6 +22,25 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen> {
   late UserDetailModel _userDetails;
 
+  // UI Logic
+  bool _isButtonLoading = false;
+  late bool _isFriend;
+
+  void _refresh() {
+    setState(() {});
+  }
+
+  Future<UserDetailModel> _futureFunction(String username) async {
+    final returnval = APIService.getUserDetails(username);
+
+    final myProfile =
+        await APIService.getUserDetails(AuthManager.getUsername());
+
+    _isFriend = myProfile.friends!.contains(username);
+
+    return returnval;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,10 +52,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             )
           : null,
       body: FutureBuilderWithLoader(
-        future: APIService.getUserDetails(widget.username),
+        future: _futureFunction(
+            widget.username), //APIService.getUserDetails(widget.username),
         onComplete: (snapshot) {
           _userDetails = snapshot.data as UserDetailModel;
-
           return Padding(
             padding: const EdgeInsets.fromLTRB(8.0, 32.0, 8.0, 0.0),
             child: Center(
@@ -61,30 +82,57 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Column(
-                        children: [
-                          profileButton(
-                            'Likes',
-                            Icons.thumb_up,
-                            _userDetails.likedSongs!.length.toString(),
+                      CustomIconButton(
+                        buttonText: 'Likes',
+                        buttonIcon: Icons.thumb_up,
+                        buttonValue: _userDetails.likedSongs!.length.toString(),
+                        onPressed: () {
+                          Navigator.pushNamed(
                             context,
-                            _userDetails,
-                          ),
-                        ],
+                            Routes.userLikesScreen,
+                            arguments: {
+                              'username': _userDetails.username!,
+                            },
+                          ).then(
+                            (_) {
+                              _refresh();
+                            },
+                          );
+                        },
                       ),
-                      Column(
-                        children: [
-                          profileButton(
-                            'Friends',
-                            Icons.people_alt_outlined,
-                            _userDetails.friends!.length.toString(),
+                      CustomIconButton(
+                        buttonText: 'Friends',
+                        buttonIcon: Icons.people_alt_outlined,
+                        buttonValue: _userDetails.friends!.length.toString(),
+                        onPressed: () {
+                          Navigator.pushNamed(
                             context,
-                            _userDetails,
-                          ),
-                        ],
+                            Routes.userFriendsScreen,
+                            arguments: {
+                              'username': _userDetails.username!,
+                              'friendsList': _userDetails.friends!,
+                            },
+                          ).then(
+                            (_) {
+                              _refresh();
+                            },
+                          );
+                        },
                       ),
                     ],
                   ),
+                  const SizedBox(height: 30),
+                  if (widget.username != AuthManager.getUsername())
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AddFriendButton(
+                          isLoading: _isButtonLoading,
+                          isFriend: _isFriend,
+                          onPressed: _addFriendLogic,
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ),
@@ -93,56 +141,22 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       ),
     );
   }
-}
 
-SizedBox profileButton(String text, IconData icon, String val,
-    BuildContext context, UserDetailModel details) {
-  return SizedBox(
-    height: 60,
-    width: 160,
-    child: ElevatedButton(
-      onPressed: () {
-        Navigator.pushNamed(
-          context,
-          Routes.userFriendsScreen,
-          arguments: {
-            'username': details.username!,
-            'friendsList': details.friends!,
-          },
-        );
-      },
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Row(
-            children: [
-              Icon(
-                icon,
-                size: 25,
-              ),
-              const SizedBox(width: 2),
-              Text(
-                val,
-                style: const TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          Text(
-            text,
-            style: const TextStyle(
-              fontSize: 25,
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
+  void _addFriendLogic() async {
+    setState(() {
+      _isButtonLoading = true;
+    });
+
+    APIService.addFriend(AuthManager.getUsername(), _userDetails.username!)
+        .then((value) {
+      setState(() {
+        _isButtonLoading = false;
+      });
+    }).catchError((error) {
+      setState(() {
+        _isButtonLoading = false;
+      });
+      print("3131: Error adding!!! $error");
+    });
+  }
 }

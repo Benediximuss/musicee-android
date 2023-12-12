@@ -13,7 +13,7 @@ class AllTracksScreen extends StatefulWidget {
 }
 
 class _AllTracksScreenState extends State<AllTracksScreen> {
-  late List<TrackModel> tracksList;
+  late List<TrackModel> _tracksList;
 
   void _refresh() {
     setState(() {});
@@ -40,10 +40,11 @@ class _AllTracksScreenState extends State<AllTracksScreen> {
       body: FutureBuilderWithLoader(
         future: APIService.getAllTracks(),
         onComplete: (snapshot) {
-          tracksList = snapshot.data as List<TrackModel>;
+          _tracksList = snapshot.data as List<TrackModel>;
           return TrackListView(
-            tracksList: tracksList,
+            tracksList: _tracksList,
             refreshListScreen: _refresh,
+            direction: Axis.vertical,
           );
         },
       ),

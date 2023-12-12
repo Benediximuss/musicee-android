@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeManager.lightTheme,
+      theme: ThemeManager.lightTheme(),
       title: 'Musicee App',
       initialRoute: AppRouter.initialRoute,
       onGenerateRoute: AppRouter.generateRoute,

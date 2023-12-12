@@ -56,6 +56,7 @@ class AuthManager {
   }
 
   static Future<String?> _findUsernameOf(String email) async {
+    // ignore: body_might_complete_normally_catch_error
     final allUsers = await APIService.getUsersAll().catchError((error) {
       print("3131: $error");
     });

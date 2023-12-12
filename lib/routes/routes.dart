@@ -9,7 +9,7 @@ class Routes {
   static const songDetailsScreen = 'songDetails';
   static const userProfileScreen = 'userProfile';
   static const userFriendsScreen = 'userFriends';
-  // userLikeds
+  static const userLikesScreen = 'userLikes';
   static const addTrackScreen = 'addTrack';
   static const updateTrackScreen = 'updateTrack';
   

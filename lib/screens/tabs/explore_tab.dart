@@ -1,11 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/routes/routes.dart';
-import 'package:musicee_app/widgets/row_element.dart';
+import 'package:musicee_app/screens/home_screen.dart';
+import 'package:musicee_app/services/api/api_service.dart';
+import 'package:musicee_app/services/auth/auth_manager.dart';
+import 'package:musicee_app/widgets/recommendations_list.dart';
 
 import '../../utils/color_manager.dart';
 
-class HomeTab extends StatelessWidget {
-  const HomeTab({super.key});
+class ExploreTab extends StatefulWidget {
+  const ExploreTab({
+    Key? key,
+    required this.parentRefreshHolder,
+  }) : super(key: key);
+
+  final RefreshHolder parentRefreshHolder;
+
+  @override
+  _ExploreTabState createState() => _ExploreTabState();
+}
+
+class _ExploreTabState extends State<ExploreTab> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    widget.parentRefreshHolder.tab1Refresh = () {
+      setState(() {});
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,21 +59,30 @@ class HomeTab extends StatelessWidget {
                       "All Songs",
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
-                        fontSize: 20,
+                        fontSize: 25,
                         color: Colors.white,
                       ),
                     ),
                   ),
                 ),
               ),
+              Container(
+                height: 2,
+                color: Colors.black12,
+              ),
               Expanded(
                 child: ListView(
                   children: [
-                    RowElement(title: 'Recommendations 1'),
-                    RowElement(title: 'Recommendations 2'),
-                    RowElement(title: 'Recommendations 3'),
-                    RowElement(title: 'Recommendations 4'),
-                    RowElement(title: 'Recommendations 5'),
+                    RecommendationsList(
+                      listTitle: 'Recommendations based on your profile',
+                      futureTrackIDs:
+                          APIService.recommendTracks(AuthManager.getUsername()),
+                    ),
+                    RecommendationsList(
+                      listTitle: 'Recommendations based on your friends',
+                      futureTrackIDs: APIService.recommendFriendsTracks(
+                          AuthManager.getUsername()),
+                    ),
                   ],
                 ),
               ),

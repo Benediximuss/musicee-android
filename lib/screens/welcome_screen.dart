@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/routes/routes.dart';
-import 'package:musicee_app/screens/sign_up_screen.dart';
-import 'package:musicee_app/screens/sign_in_screen.dart';
 import 'package:musicee_app/utils/asset_manager.dart';
-import 'package:musicee_app/utils/color_manager.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -57,10 +54,6 @@ class WelcomeScreen extends StatelessWidget {
                   style: OutlinedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(100),
-                    ),
-                    side: const BorderSide(
-                      width: 2,
-                      color: ColorManager.colorPrimary,
                     ),
                   ),
                   child: const Text('Sign In'),

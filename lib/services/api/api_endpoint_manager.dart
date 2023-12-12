@@ -20,11 +20,12 @@ final class ApiEndpointManager {
     }
   }
 
- static String users(UsersEndpoints endpoint, {String username = ''}) {
+ static String users(UsersEndpoints endpoint, {String username = '', String username2 = ''}) {
     var path = '$baseUrl/users';
     switch (endpoint) {
       case UsersEndpoints.ALL: return '$path/all';
       case UsersEndpoints.DETAILS: return '$path/get_user_details/$username';
+      case UsersEndpoints.ADD_FRIEND: return '$path/add_friend/$username/$username2';
     }
   }
 
@@ -36,10 +37,11 @@ final class ApiEndpointManager {
       case TracksEndpoints.ADD_TRACK: return '$path/add_track';
       case TracksEndpoints.UPDATE_TRACK: return '$path/update_track/$trackID';
       case TracksEndpoints.DELETE_TRACK: return '$path/delete_track/$trackID';
+      case TracksEndpoints.LIKE_TRACK: return '$path/like_track';
+      case TracksEndpoints.RECOMMEND_TRACKS: return '$path/recommend_track';
+      case TracksEndpoints.RECOMMEND_FRIENDS_TRACKS: return '$path/recommend_friend_track';
     }
   }
-
-
 }
 
 enum ApiEndpoints {
@@ -54,6 +56,7 @@ enum UserEndpoints {
 enum UsersEndpoints {
   ALL,
   DETAILS,
+  ADD_FRIEND,
 }
 
 enum TracksEndpoints {
@@ -62,4 +65,7 @@ enum TracksEndpoints {
   ADD_TRACK,
   UPDATE_TRACK,
   DELETE_TRACK,
+  LIKE_TRACK,
+  RECOMMEND_TRACKS,
+  RECOMMEND_FRIENDS_TRACKS,
 }
