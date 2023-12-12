@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 final class ColorManager {
+  const ColorManager._();
+
   static const Color colorPrimary = Color.fromARGB(255, 233, 142, 141);
   static const Color colorSecondary = Color.fromARGB(255, 151, 30, 28);
 
   static const Color colorBG = Color.fromARGB(255, 253, 240, 240);
-
-  static const Color colorX = Color(0xFFE834DF);
 
   static const Color colorAppBarText = Color.fromARGB(170, 0, 0, 0);
 
@@ -25,6 +25,4 @@ final class ColorManager {
       900: Color(0xFF7A3635),
     },
   );
-
-  Color ssss = Colors.red.shade200;
 }

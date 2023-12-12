@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:musicee_app/screens/sign_up_screen.dart';
-import 'package:musicee_app/screens/sign_in_screen.dart';
+import 'package:musicee_app/routes/routes.dart';
 import 'package:musicee_app/utils/asset_manager.dart';
-
-import '../utils/color_manager.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -11,6 +8,7 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 60.0),
         child: Center(
@@ -36,11 +34,7 @@ class WelcomeScreen extends StatelessWidget {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SignUpScreen()),
-                    );
+                    Navigator.pushNamed(context, Routes.signupScreen);
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -55,18 +49,11 @@ class WelcomeScreen extends StatelessWidget {
                 height: 50,
                 child: OutlinedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SignInScreen()),
-                    );
+                    Navigator.pushNamed(context, Routes.signinScreen);
                   },
                   style: OutlinedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(100),
-                    ),
-                    side: const BorderSide(
-                      width: 2,
-                      color: ColorManager.colorPrimary,
                     ),
                   ),
                   child: const Text('Sign In'),

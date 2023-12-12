@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:musicee_app/screens/welcome_screen.dart';
-import 'package:musicee_app/utils/color_manager.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:musicee_app/routes/app_router.dart';
+import 'package:musicee_app/routes/routes.dart';
+import 'package:musicee_app/services/auth/auth_manager.dart';
+import 'package:musicee_app/utils/theme_manager.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final bool isLogged = await AuthManager.init();
+  AppRouter.initialRoute = isLogged ? Routes.homeScreen : Routes.welcomeScreen;
+
   runApp(const MyApp());
 }
 
@@ -14,47 +20,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        scaffoldBackgroundColor: ColorManager.colorBG,
-        textTheme: GoogleFonts.robotoCondensedTextTheme(),
-        appBarTheme: AppBarTheme(
-            titleTextStyle: GoogleFonts.robotoCondensed(
-              color: ColorManager.colorAppBarText,
-              fontSize: 25,
-            ),
-            iconTheme: const IconThemeData(
-              color: ColorManager.colorAppBarText,
-            )),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.white,
-            textStyle: GoogleFonts.robotoCondensed(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        outlinedButtonTheme: OutlinedButtonThemeData(
-          style: OutlinedButton.styleFrom(
-            textStyle: GoogleFonts.robotoCondensed(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        primarySwatch: ColorManager.swatchPrimary,
-        inputDecorationTheme: InputDecorationTheme(
-          fillColor: Colors.red,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          floatingLabelStyle: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-      home: const WelcomeScreen(),
+      theme: ThemeManager.lightTheme(),
+      title: 'Musicee App',
+      initialRoute: AppRouter.initialRoute,
+      onGenerateRoute: AppRouter.generateRoute,
     );
   }
 }
