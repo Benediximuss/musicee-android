@@ -65,6 +65,7 @@ class _RecommendationsListState extends State<RecommendationsList> {
     try {
       List<String> likedTrackIDs = await widget.futureTrackIDs;
 
+      // ignore: unnecessary_null_comparison
       if (likedTrackIDs == null) {
         print("3131: ıds NULL!!!");
         throw Exception('3131: TrackIDs NULL');

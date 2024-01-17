@@ -1,3 +1,5 @@
+// ignore_for_file: body_might_complete_normally_catch_error
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:musicee_app/models/track_model.dart';

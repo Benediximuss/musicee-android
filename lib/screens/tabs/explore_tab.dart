@@ -5,7 +5,6 @@ import 'package:musicee_app/routes/routes.dart';
 import 'package:musicee_app/screens/home_screen.dart';
 import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/services/auth/auth_manager.dart';
-import 'package:musicee_app/widgets/lists/cards/artist_list_card.dart';
 import 'package:musicee_app/widgets/lists/recommendations_list.dart';
 import 'package:musicee_app/widgets/lists/recommendations_list_artists.dart';
 
