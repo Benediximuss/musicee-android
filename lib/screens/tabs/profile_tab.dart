@@ -36,6 +36,7 @@ class _ProfileTabState extends State<ProfileTab>
 
   @override
   Widget build(BuildContext context) {
+    print("3131: PROFILEEE");
     return UserProfileScreen(
       showAppBar: false,
       username: AuthManager.getUsername(),

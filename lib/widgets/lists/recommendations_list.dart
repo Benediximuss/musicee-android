@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:musicee_app/models/track_model.dart';
 import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/services/auth/auth_manager.dart';
-import 'package:musicee_app/utils/color_manager.dart';
-import 'package:musicee_app/widgets/future_builder_with_loader.dart';
-import 'package:musicee_app/widgets/track_list_view.dart';
+import 'package:musicee_app/widgets/loaders/future_builder_with_loader.dart';
+import 'package:musicee_app/widgets/lists/track_list_view.dart';
 
 class RecommendationsList extends StatefulWidget {
   const RecommendationsList({
@@ -26,10 +25,10 @@ class _RecommendationsListState extends State<RecommendationsList> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Container(
-            // color: ColorManager.swatchPrimary.shade200.withOpacity(0.6),
-            child: Column(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Container(
+        // color: ColorManager.swatchPrimary.shade200.withOpacity(0.6),
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
@@ -57,7 +56,9 @@ class _RecommendationsListState extends State<RecommendationsList> {
               ),
             ),
           ],
-        )));
+        ),
+      ),
+    );
   }
 
   Future<List<TrackModel>> _getRecommendations(String username) async {
@@ -73,7 +74,7 @@ class _RecommendationsListState extends State<RecommendationsList> {
 
       try {
         for (String trackID in likedTrackIDs) {
-          tracks.add(await APIService.getTrackDetails(trackID));
+          tracks.add(await APIService.getTrackDetails(trackID, false));
         }
       } catch (error) {
         print("3131: FOR LOOP ERROR!");

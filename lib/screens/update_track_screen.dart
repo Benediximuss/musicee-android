@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/models/track_model.dart';
 import 'package:musicee_app/services/api/api_service.dart';
-import 'package:musicee_app/widgets/future_builder_with_loader.dart';
+import 'package:musicee_app/widgets/loaders/future_builder_with_loader.dart';
 import 'package:musicee_app/widgets/track_input_view.dart';
 
 class UpdateTrackScreen extends StatelessWidget {
@@ -16,7 +16,7 @@ class UpdateTrackScreen extends StatelessWidget {
         title: const Text('Update a song'),
       ),
       body: FutureBuilderWithLoader(
-        future: APIService.getTrackDetails(trackID),
+        future: APIService.getTrackDetails(trackID, true),
         onComplete: (snapshot) {
           return TrackInputView(
             inputType: InputTypes.UPDATE,

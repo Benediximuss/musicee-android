@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/models/track_model.dart';
-import 'package:musicee_app/widgets/track_card_horizontal_list.dart';
-import 'package:musicee_app/widgets/track_card_vertical_list.dart';
+import 'package:musicee_app/widgets/lists/cards/track_card_horizontal_list.dart';
+import 'package:musicee_app/widgets/lists/cards/track_card_vertical_list.dart';
 
 class TrackListView extends StatelessWidget {
   final List<TrackModel> tracksList;

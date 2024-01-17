@@ -23,13 +23,15 @@ class TrackCardHorizontalList extends StatelessWidget {
           arguments: {
             'trackID': trackDetails.trackId,
           },
-        ).then((_) {
-          if (refreshListScreen != null) {
-            refreshListScreen!();
-          } else {
-            print("3131: then null refresh!");
-          }
-        });
+        ).then(
+          (_) {
+            if (refreshListScreen != null) {
+              refreshListScreen!();
+            } else {
+              print("3131: then null refresh!");
+            }
+          },
+        );
       },
       child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0),

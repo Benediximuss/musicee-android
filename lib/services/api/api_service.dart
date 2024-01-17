@@ -121,7 +121,8 @@ class APIService {
     }
   }
 
-  static Future<TrackModel> getTrackDetails(String trackID) async {
+  static Future<TrackModel> getTrackDetails(
+      String trackID, bool getGenre) async {
     String url = ApiEndpointManager.tracks(TracksEndpoints.GET_TRACK_DETAILS);
 
     try {
@@ -132,7 +133,9 @@ class APIService {
         var returnval =
             TrackModel.fromJson(json.decode(utf8.decode(response.bodyBytes)));
 
-        returnval.genre ??= await _findGenreOf(returnval.trackId!);
+        if (getGenre) {
+          returnval.genre ??= await _findGenreOf(returnval.trackId!);
+        }
 
         return returnval;
       } else if (response.statusCode == 500) {
@@ -270,6 +273,28 @@ class APIService {
   static Future<List<String>> recommendFriendsTracks(String username) async {
     String url =
         ApiEndpointManager.tracks(TracksEndpoints.RECOMMEND_FRIENDS_TRACKS);
+
+    try {
+      final response = await http.post(
+          Uri.parse(url).replace(queryParameters: {'username': username}));
+
+      if (response.statusCode == 200) {
+        // Parse the JSON response
+        List<String> returnval =
+            json.decode(utf8.decode(response.bodyBytes)).cast<String>();
+        return returnval;
+      } else {
+        throw Exception(
+            'Failed to get data from server (Status code: ${response.statusCode})');
+      }
+    } catch (error) {
+      return Future.error(error);
+    }
+  }
+
+  static Future<List<String>> recommendArtists(String username) async {
+    String url =
+        ApiEndpointManager.tracks(TracksEndpoints.RECOMMEND_ARTISTS);
 
     try {
       final response = await http.post(

@@ -12,5 +12,5 @@ class Routes {
   static const userLikesScreen = 'userLikes';
   static const addTrackScreen = 'addTrack';
   static const updateTrackScreen = 'updateTrack';
-  
+  static const artistTracksScreen = 'artistTracks';
 }

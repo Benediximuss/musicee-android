@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/utils/color_manager.dart';
-import 'package:musicee_app/widgets/friend_list_card.dart';
+import 'package:musicee_app/widgets/lists/cards/friend_list_card.dart';
 
 class UserFriendsScreen extends StatefulWidget {
   const UserFriendsScreen({
