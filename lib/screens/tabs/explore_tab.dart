@@ -1,9 +1,13 @@
+// ignore_for_file: must_call_super
+
 import 'package:flutter/material.dart';
 import 'package:musicee_app/routes/routes.dart';
 import 'package:musicee_app/screens/home_screen.dart';
 import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/services/auth/auth_manager.dart';
-import 'package:musicee_app/widgets/recommendations_list.dart';
+import 'package:musicee_app/widgets/lists/cards/artist_list_card.dart';
+import 'package:musicee_app/widgets/lists/recommendations_list.dart';
+import 'package:musicee_app/widgets/lists/recommendations_list_artists.dart';
 
 import '../../utils/color_manager.dart';
 
@@ -19,7 +23,8 @@ class ExploreTab extends StatefulWidget {
   _ExploreTabState createState() => _ExploreTabState();
 }
 
-class _ExploreTabState extends State<ExploreTab> with AutomaticKeepAliveClientMixin {
+class _ExploreTabState extends State<ExploreTab>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -75,13 +80,21 @@ class _ExploreTabState extends State<ExploreTab> with AutomaticKeepAliveClientMi
                   children: [
                     RecommendationsList(
                       listTitle: 'Recommendations based on your profile',
-                      futureTrackIDs:
-                          APIService.recommendTracks(AuthManager.getUsername()),
+                      futureTrackIDs: APIService.recommendTracks(
+                        AuthManager.getUsername(),
+                      ),
                     ),
                     RecommendationsList(
                       listTitle: 'Recommendations based on your friends',
                       futureTrackIDs: APIService.recommendFriendsTracks(
-                          AuthManager.getUsername()),
+                        AuthManager.getUsername(),
+                      ),
+                    ),
+                    RecommendationsListArtists(
+                      listTitle: 'Reccommended Artists',
+                      futureArtistNames: APIService.recommendArtists(
+                        'uguroztunc', //AuthManager.getUsername(),
+                      ),
                     ),
                   ],
                 ),

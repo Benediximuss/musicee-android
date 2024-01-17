@@ -3,10 +3,10 @@ import 'package:musicee_app/models/track_model.dart';
 import 'package:musicee_app/routes/routes.dart';
 import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/services/auth/auth_manager.dart';
-import 'package:musicee_app/widgets/custom_icon_button.dart';
-import 'package:musicee_app/widgets/future_builder_with_loader.dart';
-import 'package:musicee_app/widgets/like_button.dart';
-import 'package:musicee_app/widgets/loader_view.dart';
+import 'package:musicee_app/widgets/components/custom_icon_button.dart';
+import 'package:musicee_app/widgets/loaders/future_builder_with_loader.dart';
+import 'package:musicee_app/widgets/components/like_button.dart';
+import 'package:musicee_app/widgets/loaders/loader_view.dart';
 import 'package:musicee_app/widgets/confirm_dialog.dart';
 
 class SongDetailScreen extends StatefulWidget {
@@ -35,7 +35,7 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
   }
 
   Future<TrackModel> updateAndGetList() async {
-    return APIService.getTrackDetails(widget.trackID);
+    return APIService.getTrackDetails(widget.trackID, true);
   }
 
   bool _hasLiked() {
@@ -215,17 +215,15 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
                   ),
                   const SizedBox(height: 12),
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CustomIconButton(
                             buttonText: 'Update',
                             buttonIcon: Icons.edit_rounded,
                             height: 60,
-                            width: 140,
+                            width: 150,
                             onPressed: () {
                               Navigator.pushNamed(
                                 context,
@@ -240,7 +238,7 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
                             buttonText: 'Delete',
                             buttonIcon: Icons.delete_rounded,
                             height: 60,
-                            width: 140,
+                            width: 150,
                             onPressed: () {
                               _deleteLogic(context);
                             },
@@ -272,7 +270,7 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
   void _deleteLogic(final context) async {
     if (await confirmDialog(
       context: context,
-      warningText: 'Are you sure you want to delete the song?',
+      warningText: 'Are you sure you want to delete this song?',
       actionButtonText: 'Delete',
     )) {
       setState(() {
@@ -301,7 +299,7 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
     if (_isLiked &&
         !(await confirmDialog(
           context: context,
-          warningText: 'Are you sure you want to unlike the song?',
+          warningText: 'Are you sure you want to unlike this song?',
           actionButtonText: 'Unlike',
         ))) {
       return;

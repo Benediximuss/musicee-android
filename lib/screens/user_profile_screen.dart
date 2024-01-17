@@ -3,9 +3,9 @@ import 'package:musicee_app/models/user_detail_model.dart';
 import 'package:musicee_app/routes/routes.dart';
 import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/services/auth/auth_manager.dart';
-import 'package:musicee_app/widgets/add_friend_button.dart';
-import 'package:musicee_app/widgets/custom_icon_button.dart';
-import 'package:musicee_app/widgets/future_builder_with_loader.dart';
+import 'package:musicee_app/widgets/components/add_friend_button.dart';
+import 'package:musicee_app/widgets/components/custom_icon_button.dart';
+import 'package:musicee_app/widgets/loaders/future_builder_with_loader.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen(

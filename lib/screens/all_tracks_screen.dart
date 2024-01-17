@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:musicee_app/models/track_model.dart';
 import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/utils/color_manager.dart';
-import 'package:musicee_app/widgets/future_builder_with_loader.dart';
-import 'package:musicee_app/widgets/track_list_view.dart';
+import 'package:musicee_app/widgets/loaders/future_builder_with_loader.dart';
+import 'package:musicee_app/widgets/lists/track_list_view.dart';
 
 class AllTracksScreen extends StatefulWidget {
   const AllTracksScreen({super.key});

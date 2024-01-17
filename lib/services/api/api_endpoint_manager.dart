@@ -40,6 +40,7 @@ final class ApiEndpointManager {
       case TracksEndpoints.LIKE_TRACK: return '$path/like_track';
       case TracksEndpoints.RECOMMEND_TRACKS: return '$path/recommend_track';
       case TracksEndpoints.RECOMMEND_FRIENDS_TRACKS: return '$path/recommend_friend_track';
+      case TracksEndpoints.RECOMMEND_ARTISTS: return '$path/recommend_artist_track';
     }
   }
 }
@@ -68,4 +69,5 @@ enum TracksEndpoints {
   LIKE_TRACK,
   RECOMMEND_TRACKS,
   RECOMMEND_FRIENDS_TRACKS,
+  RECOMMEND_ARTISTS,
 }

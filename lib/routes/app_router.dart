@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/routes/routes.dart';
 import 'package:musicee_app/screens/all_tracks_screen.dart';
+import 'package:musicee_app/screens/artist_tracks_screen.dart';
 import 'package:musicee_app/screens/home_screen.dart';
 import 'package:musicee_app/screens/sign_up_screen.dart';
 import 'package:musicee_app/screens/sign_in_screen.dart';
@@ -92,6 +93,13 @@ class AppRouter {
             trackID: arguments['trackID'],
           ),
           settings: const RouteSettings(name: Routes.updateTrackScreen),
+        );
+      case Routes.artistTracksScreen:
+        return MaterialPageRoute(
+          builder: (_) => ArtistTracksScreen(
+            artistName: arguments['artistName'],
+          ),
+          settings: const RouteSettings(name: Routes.artistTracksScreen),
         );
       default:
         return MaterialPageRoute(

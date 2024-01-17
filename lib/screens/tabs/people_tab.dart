@@ -1,9 +1,11 @@
+// ignore_for_file: must_call_super
+
 import 'package:flutter/material.dart';
 import 'package:musicee_app/models/user_detail_model.dart';
 import 'package:musicee_app/screens/home_screen.dart';
 import 'package:musicee_app/services/api/api_service.dart';
-import 'package:musicee_app/widgets/friend_list_card.dart';
-import 'package:musicee_app/widgets/future_builder_with_loader.dart';
+import 'package:musicee_app/widgets/lists/cards/friend_list_card.dart';
+import 'package:musicee_app/widgets/loaders/future_builder_with_loader.dart';
 
 class PeopleTab extends StatefulWidget {
   const PeopleTab({
