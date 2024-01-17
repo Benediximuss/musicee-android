@@ -1,3 +1,24 @@
+class SignUpRequestModel {
+  String username;
+  String email;
+  String password;
+
+  SignUpRequestModel({
+    required this.username,
+    required this.email,
+    required this.password,
+  });
+
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> map = {
+      'username': username.trim(),
+      'email': email.trim(),
+      'password': password.trim(),
+    };
+    return map;
+  }
+}
+
 class SignUpResponseModel {
   final String email;
   final String error;
@@ -19,26 +40,5 @@ class SignUpResponseModel {
         error: '',
       );
     }
-  }
-}
-
-class SignUpRequestModel {
-  String username;
-  String email;
-  String password;
-
-  SignUpRequestModel({
-    required this.username,
-    required this.email,
-    required this.password,
-  });
-
-  Map<String, dynamic> toJson() {
-    Map<String, dynamic> map = {
-      'username': username.trim(),
-      'email': email.trim(),
-      'password': password.trim(),
-    };
-    return map;
   }
 }
