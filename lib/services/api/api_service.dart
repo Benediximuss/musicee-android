@@ -10,11 +10,17 @@ import 'package:collection/collection.dart';
 class APIService {
   const APIService._();
 
+  static late http.Client httpClient;
+
+  static void init({http.Client? client}) {
+    httpClient = client ?? http.Client();
+  }
+
   static Future<SignUpResponseModel> signup(
       SignUpRequestModel requestModel) async {
     String url = ApiEndpointManager.user(UserEndpoints.SIGNUP);
 
-    final response = await http.post(
+    final response = await httpClient.post(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(requestModel.toJson()),
@@ -38,7 +44,7 @@ class APIService {
       SignInRequestModel requestModel) async {
     String url = ApiEndpointManager.user(UserEndpoints.LOGIN);
 
-    final response = await http.post(
+    final response = await httpClient.post(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(requestModel.toJson()),
@@ -62,7 +68,7 @@ class APIService {
     String url = ApiEndpointManager.users(UsersEndpoints.ALL);
 
     try {
-      final response = await http.get(Uri.parse(url));
+      final response = await httpClient.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
         List<dynamic> jsonList = json.decode(utf8.decode(response.bodyBytes));
@@ -85,7 +91,7 @@ class APIService {
     );
 
     try {
-      final response = await http.get(Uri.parse(url));
+      final response = await httpClient.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
         var returnval = UserDetailModel.fromJson(
@@ -104,7 +110,7 @@ class APIService {
     String url = ApiEndpointManager.tracks(TracksEndpoints.GET_TRACKS);
 
     try {
-      final response = await http.get(Uri.parse(url));
+      final response = await httpClient.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
         // Parse the JSON response
@@ -160,7 +166,7 @@ class APIService {
     String url = ApiEndpointManager.tracks(TracksEndpoints.ADD_TRACK);
 
     try {
-      final response = await http.post(
+      final response = await httpClient.post(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(requestModel.toJson()),
@@ -186,7 +192,7 @@ class APIService {
     );
 
     try {
-      final response = await http.put(
+      final response = await httpClient.put(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(requestModel.toJson()),
@@ -210,7 +216,7 @@ class APIService {
     );
 
     try {
-      final response = await http.delete(
+      final response = await httpClient.delete(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
       );
@@ -230,7 +236,7 @@ class APIService {
     String url = ApiEndpointManager.tracks(TracksEndpoints.LIKE_TRACK);
 
     try {
-      final response = await http.post(Uri.parse(url).replace(
+      final response = await httpClient.post(Uri.parse(url).replace(
         queryParameters: {
           'username': username,
           'track_id': trackID,
@@ -252,7 +258,7 @@ class APIService {
     String url = ApiEndpointManager.tracks(TracksEndpoints.RECOMMEND_TRACKS);
 
     try {
-      final response = await http.post(
+      final response = await httpClient.post(
           Uri.parse(url).replace(queryParameters: {'username': username}));
 
       if (response.statusCode == 200) {
@@ -275,7 +281,7 @@ class APIService {
         ApiEndpointManager.tracks(TracksEndpoints.RECOMMEND_FRIENDS_TRACKS);
 
     try {
-      final response = await http.post(
+      final response = await httpClient.post(
           Uri.parse(url).replace(queryParameters: {'username': username}));
 
       if (response.statusCode == 200) {
@@ -293,11 +299,10 @@ class APIService {
   }
 
   static Future<List<String>> recommendArtists(String username) async {
-    String url =
-        ApiEndpointManager.tracks(TracksEndpoints.RECOMMEND_ARTISTS);
+    String url = ApiEndpointManager.tracks(TracksEndpoints.RECOMMEND_ARTISTS);
 
     try {
-      final response = await http.post(
+      final response = await httpClient.post(
           Uri.parse(url).replace(queryParameters: {'username': username}));
 
       if (response.statusCode == 200) {
@@ -333,7 +338,7 @@ class APIService {
     );
 
     try {
-      final response = await http.put(
+      final response = await httpClient.put(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
       );
