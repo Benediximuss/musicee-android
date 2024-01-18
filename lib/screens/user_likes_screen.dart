@@ -69,7 +69,10 @@ class _UserLikesScreenState extends State<UserLikesScreen> {
 
       try {
         for (String trackID in likedTrackIDs) {
-          likedTracks.add(await APIService.getTrackDetails(trackID, false));
+          likedTracks.add(await APIService.getTrackDetails(
+            trackID,
+            getGenre: true,
+          ));
         }
       } catch (error) {
         print("3131: FOR LOOP ERROR!");

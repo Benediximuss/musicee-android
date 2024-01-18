@@ -75,7 +75,7 @@ class _RecommendationsListState extends State<RecommendationsList> {
 
       try {
         for (String trackID in likedTrackIDs) {
-          tracks.add(await APIService.getTrackDetails(trackID, false));
+          tracks.add(await APIService.getTrackDetails(trackID));
         }
       } catch (error) {
         print("3131: FOR LOOP ERROR!");

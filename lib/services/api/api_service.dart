@@ -129,12 +129,12 @@ class APIService {
     }
   }
 
-  static Future<TrackModel> getTrackDetails(
-      String trackID, bool getGenre) async {
+  static Future<TrackModel> getTrackDetails(String trackID,
+      {bool getGenre = false}) async {
     String url = ApiEndpointManager.tracks(TracksEndpoints.GET_TRACK_DETAILS);
 
     try {
-      final response = await http
+      final response = await httpClient
           .post(Uri.parse(url).replace(queryParameters: {'track_id': trackID}));
 
       if (response.statusCode == 200) {

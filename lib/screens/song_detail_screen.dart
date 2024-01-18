@@ -35,7 +35,10 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
   }
 
   Future<TrackModel> updateAndGetList() async {
-    return APIService.getTrackDetails(widget.trackID, true);
+    return APIService.getTrackDetails(
+      widget.trackID,
+      getGenre: true,
+    );
   }
 
   bool _hasLiked() {

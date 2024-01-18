@@ -9,14 +9,14 @@ void main() {
       'THEN a json with username, email and password should returned',
       () {
         final request = SignUpRequestModel(
-          username: 'test_user',
+          username: 'test_username',
           email: 'test_email',
           password: 'test_password',
         );
 
         final json = request.toJson();
         final matcher = {
-          'username': 'test_user',
+          'username': 'test_username',
           'email': 'test_email',
           'password': 'test_password',
         };
@@ -27,16 +27,18 @@ void main() {
   });
   group('SignUpResponseModel', () {
     test(
-      'GIVEN a valid json with email'
+      'GIVEN a valid json with email and username'
       'WHEN a json deserialization is performed'
       'THEN a sign up response model with email should returned',
       () {
         final json = {
+          'username': 'test_username',
           'email': 'test_email',
         };
 
         final response = SignUpResponseModel.fromJson(json);
 
+        expect(response.username, 'test_username');
         expect(response.email, 'test_email');
         expect(response.error, '');
       },

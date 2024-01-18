@@ -9,13 +9,13 @@ void main() {
       'THEN a json with username and password should returned',
       () {
         final request = SignInRequestModel(
-          username: 'test_user',
+          username: 'test_username',
           password: 'test_password',
         );
 
         final json = request.toJson();
         final matcher = {
-          'username': 'test_user',
+          'username': 'test_username',
           'password': 'test_password',
         };
 

@@ -3,17 +3,17 @@
 final class ApiEndpointManager {
   const ApiEndpointManager._();
 
-  static const baseUrl = 'http://musicee.us-west-2.elasticbeanstalk.com';
+  static const _baseUrl = 'http://musicee.us-west-2.elasticbeanstalk.com';
 
   static String api(ApiEndpoints endpoint) {
-    var path = '$baseUrl/api';
+    var path = '$_baseUrl/api';
     switch (endpoint) {
       case ApiEndpoints.HEALTH: return '$path/health';
     }
   }
 
   static String user(UserEndpoints endpoint) {
-    var path = '$baseUrl/user';
+    var path = '$_baseUrl/user';
     switch (endpoint) {
       case UserEndpoints.SIGNUP: return '$path/signup';
       case UserEndpoints.LOGIN: return '$path/login';
@@ -21,7 +21,7 @@ final class ApiEndpointManager {
   }
 
  static String users(UsersEndpoints endpoint, {String username = '', String username2 = ''}) {
-    var path = '$baseUrl/users';
+    var path = '$_baseUrl/users';
     switch (endpoint) {
       case UsersEndpoints.ALL: return '$path/all';
       case UsersEndpoints.DETAILS: return '$path/get_user_details/$username';
@@ -30,7 +30,7 @@ final class ApiEndpointManager {
   }
 
   static String tracks(TracksEndpoints endpoint, {String trackID = ''}) {
-    var path = '$baseUrl/tracks';
+    var path = '$_baseUrl/tracks';
     switch (endpoint) {
       case TracksEndpoints.GET_TRACKS: return '$path/get_tracks';
       case TracksEndpoints.GET_TRACK_DETAILS: return '$path/get_track_details';
