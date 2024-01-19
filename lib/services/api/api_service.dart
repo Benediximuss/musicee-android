@@ -99,6 +99,8 @@ class APIService {
         var returnval = UserDetailModel.fromJson(
             json.decode(utf8.decode(response.bodyBytes)));
         return returnval;
+      } else if (response.statusCode == 404) {
+        throw Exception('404');
       } else {
         throw Exception(
             'Failed to get data from server (Status code: ${response.statusCode})');
