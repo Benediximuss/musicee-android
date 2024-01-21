@@ -33,7 +33,7 @@ final class ApiEndpointManager {
     var path = '$_baseUrl/tracks';
     switch (endpoint) {
       case TracksEndpoints.GET_TRACKS: return '$path/get_tracks';
-      case TracksEndpoints.GET_TRACK_DETAILS: return '$path/get_track_details';
+      case TracksEndpoints.GET_TRACK_DETAILS: return '$path/get_track_details/$trackID';
       case TracksEndpoints.ADD_TRACK: return '$path/add_track';
       case TracksEndpoints.UPDATE_TRACK: return '$path/update_track/$trackID';
       case TracksEndpoints.DELETE_TRACK: return '$path/delete_track/$trackID';
@@ -43,6 +43,21 @@ final class ApiEndpointManager {
       case TracksEndpoints.RECOMMEND_ARTISTS: return '$path/recommend_artist_track';
     }
   }
+
+  static String artist(ArtistEndpoints endpoint) {
+    var path = '$_baseUrl/artist';
+    switch (endpoint) {
+      case ArtistEndpoints.TRACKS: return '$path/tracks';
+    }
+  }
+
+  static String album(AlbumEndpoints endpoint) {
+    var path = '$_baseUrl/album';
+    switch (endpoint) {
+      case AlbumEndpoints.TRACKS: return '$path/tracks';
+    }
+  }
+
 }
 
 enum ApiEndpoints {
@@ -70,4 +85,12 @@ enum TracksEndpoints {
   RECOMMEND_TRACKS,
   RECOMMEND_FRIENDS_TRACKS,
   RECOMMEND_ARTISTS,
+}
+
+enum ArtistEndpoints {
+  TRACKS,
+}
+
+enum AlbumEndpoints {
+  TRACKS,
 }

@@ -78,8 +78,10 @@ class TrackCardHorizontalList extends StatelessWidget {
                       children: [
                         Text(
                           trackDetails.trackName,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87.withOpacity(0.7),
                           ),
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/models/track_model.dart';
 import 'package:musicee_app/routes/routes.dart';
+import 'package:musicee_app/screens/album_screen.dart';
+import 'package:musicee_app/screens/artist_screen.dart';
 import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/services/auth/auth_manager.dart';
+import 'package:musicee_app/utils/color_manager.dart';
 import 'package:musicee_app/widgets/components/custom_icon_button.dart';
+import 'package:musicee_app/widgets/components/custom_icon_button_mini.dart';
+import 'package:musicee_app/widgets/components/elevated_icon.dart';
 import 'package:musicee_app/widgets/loaders/future_builder_with_loader.dart';
 import 'package:musicee_app/widgets/components/like_button.dart';
 import 'package:musicee_app/widgets/loaders/loader_view.dart';
@@ -26,6 +31,10 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
   bool _isLoading = false;
   bool _isButtonLoading = false;
   late bool _isLiked;
+
+  bool _isChanged = false;
+
+  final _popupMenu = GlobalKey<PopupMenuButtonState>();
 
   @override
   void initState() {
@@ -52,6 +61,12 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Song Details'),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context, _isChanged);
+            },
+          ),
         ),
         body: FutureBuilderWithLoader(
           future: _futureModel,
@@ -59,37 +74,15 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
             _trackDetails = snapshot.data;
             _isLiked = _hasLiked();
             return Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 25.0,
+                vertical: 30.0,
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black26,
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Icon(
-                          Icons.music_note_rounded,
-                          size: 100,
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ),
+                  const ElevatedIcon(
+                    iconData: Icons.music_note_rounded,
                   ),
                   const SizedBox(height: 12),
                   Column(
@@ -127,9 +120,10 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
                               ),
                             ),
                           ),
+                          const SizedBox(height: 10),
                         ],
                       ),
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 30),
                       Column(
                         children: [
                           Row(
@@ -206,7 +200,9 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
                                     _trackDetails.trackLikeList!.length
                                         .toString(),
                                     style: const TextStyle(
-                                        fontSize: 24, color: Colors.black54),
+                                      fontSize: 24,
+                                      color: Colors.black54,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -216,7 +212,92 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        if (_trackDetails.trackArtist.length == 1)
+                          CustomIconButtonMini(
+                            buttonText: 'See artist',
+                            buttonIcon: Icons.people_alt_rounded,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ArtistScreen(
+                                    artistName: _trackDetails.trackArtist.first,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        if (_trackDetails.trackArtist.length > 1)
+                          PopupMenuButton<String>(
+                            key: _popupMenu,
+                            color: ColorManager.colorBG,
+                            offset: const Offset(-10, 0),
+                            elevation: 12,
+                            shape: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade700,
+                                width: 2,
+                              ),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(16),
+                              ),
+                            ),
+                            child: CustomIconButtonMini(
+                              buttonText: 'See artists',
+                              buttonIcon: Icons.people_alt_rounded,
+                              onPressed: () {
+                                _popupMenu.currentState?.showButtonMenu();
+                              },
+                            ),
+                            onSelected: (value) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ArtistScreen(
+                                    artistName: value,
+                                  ),
+                                ),
+                              );
+                            },
+                            itemBuilder: (context) => _trackDetails.trackArtist
+                                .map(
+                                  (item) => PopupMenuItem<String>(
+                                    value: item,
+                                    child: Text(
+                                      item,
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.grey.shade800,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        CustomIconButtonMini(
+                          buttonText: 'See album',
+                          buttonIcon: Icons.album_rounded,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AlbumScreen(
+                                  albumName: _trackDetails.trackAlbum,
+                                  artistName: _trackDetails.trackArtist.first,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 6),
                   Column(
                     children: [
                       Row(
@@ -225,8 +306,6 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
                           CustomIconButton(
                             buttonText: 'Update',
                             buttonIcon: Icons.edit_rounded,
-                            height: 60,
-                            width: 150,
                             onPressed: () {
                               Navigator.pushNamed(
                                 context,
@@ -240,8 +319,6 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
                           CustomIconButton(
                             buttonText: 'Delete',
                             buttonIcon: Icons.delete_rounded,
-                            height: 60,
-                            width: 150,
                             onPressed: () {
                               _deleteLogic(context);
                             },
@@ -284,11 +361,7 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
         setState(() {
           _isLoading = false;
         });
-        if (value != null) {
-          print("3131: ZORTZORT OLDU");
-        } else {
-          Navigator.pop(context);
-        }
+        Navigator.pop(context, true);
       }).catchError((error) {
         setState(() {
           _isLoading = false;
@@ -317,6 +390,7 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
       setState(() {
         _isButtonLoading = false;
         _futureModel = updateAndGetList();
+        _isChanged = true;
       });
     }).catchError((error) {
       setState(() {

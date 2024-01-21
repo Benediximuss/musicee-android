@@ -133,11 +133,13 @@ class APIService {
 
   static Future<TrackModel> getTrackDetails(String trackID,
       {bool getGenre = false}) async {
-    String url = ApiEndpointManager.tracks(TracksEndpoints.GET_TRACK_DETAILS);
+    String url = ApiEndpointManager.tracks(
+      TracksEndpoints.GET_TRACK_DETAILS,
+      trackID: trackID,
+    );
 
     try {
-      final response = await httpClient
-          .post(Uri.parse(url).replace(queryParameters: {'track_id': trackID}));
+      final response = await httpClient.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
         var returnval =
@@ -149,7 +151,7 @@ class APIService {
 
         return returnval;
       } else if (response.statusCode == 500) {
-        print("3131: 500 TRACK DETAILS");
+        print("3131: TRACK DETAILS RESPONDED 500, LOOKING ALL SONGS");
         List<TrackModel> tracks = await getAllTracks();
         for (var element in tracks) {
           if (element.trackId == trackID) {
@@ -288,16 +290,18 @@ class APIService {
       final response = await httpClient.post(
           Uri.parse(url).replace(queryParameters: {'username': username}));
 
+      dynamic responseBody = json.decode(utf8.decode(response.bodyBytes));
+
       if (response.statusCode == 200) {
-        // Parse the JSON response
-        List<String> returnval =
-            json.decode(utf8.decode(response.bodyBytes)).cast<String>();
-        return returnval;
+        return responseBody.cast<String>();
+      } else if (responseBody.containsKey('detail')) {
+        return [];
       } else {
         throw Exception(
             'Failed to get data from server (Status code: ${response.statusCode})');
       }
     } catch (error) {
+      print('3131: $error');
       return Future.error(error);
     }
   }
@@ -349,6 +353,50 @@ class APIService {
 
       if (response.statusCode == 200) {
         return;
+      } else {
+        throw Exception(
+            'Failed to get data from server (Status code: ${response.statusCode})');
+      }
+    } catch (error) {
+      return Future.error(error);
+    }
+  }
+
+  static Future<List<TrackModel>> artistAllTracks(String artistName) async {
+    String url = ApiEndpointManager.artist(ArtistEndpoints.TRACKS);
+
+    try {
+      final response = await httpClient.get(Uri.parse(url).replace(
+        queryParameters: {'track_artist': artistName},
+      ));
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = json.decode(utf8.decode(response.bodyBytes));
+        List<TrackModel> returnval =
+            jsonList.map((json) => TrackModel.fromJson(json)).toList();
+        return returnval;
+      } else {
+        throw Exception(
+            'Failed to get data from server (Status code: ${response.statusCode})');
+      }
+    } catch (error) {
+      return Future.error(error);
+    }
+  }
+
+  static Future<List<TrackModel>> albumAllTracks(String albumName) async {
+    String url = ApiEndpointManager.album(AlbumEndpoints.TRACKS);
+
+    try {
+      final response = await httpClient.get(Uri.parse(url).replace(
+        queryParameters: {'track_album': albumName},
+      ));
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = json.decode(utf8.decode(response.bodyBytes));
+        List<TrackModel> returnval =
+            jsonList.map((json) => TrackModel.fromJson(json)).toList();
+        return returnval;
       } else {
         throw Exception(
             'Failed to get data from server (Status code: ${response.statusCode})');

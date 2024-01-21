@@ -105,11 +105,14 @@ void main() {
           () async {
             // Arrange
             when(
-              () => mockHTTPClient.post(Uri.parse(ApiEndpointManager.tracks(
-                      TracksEndpoints.GET_TRACK_DETAILS))
-                  .replace(
-                queryParameters: {'track_id': 'test_track_id'},
-              )),
+              () => mockHTTPClient.get(
+                Uri.parse(
+                  ApiEndpointManager.tracks(
+                    TracksEndpoints.GET_TRACK_DETAILS,
+                    trackID: 'test_track_id',
+                  ),
+                ),
+              ),
             ).thenAnswer((invocation) async {
               return http.Response(
                 '''
@@ -147,11 +150,14 @@ void main() {
           () async {
             // Arrange
             when(
-              () => mockHTTPClient.post(Uri.parse(ApiEndpointManager.tracks(
-                      TracksEndpoints.GET_TRACK_DETAILS))
-                  .replace(
-                queryParameters: {'track_id': 'test_track_id'},
-              )),
+              () => mockHTTPClient.get(
+                Uri.parse(
+                  ApiEndpointManager.tracks(
+                    TracksEndpoints.GET_TRACK_DETAILS,
+                    trackID: 'test_track_id',
+                  ),
+                ),
+              ),
             ).thenAnswer((invocation) async {
               return http.Response(
                 '''

@@ -27,13 +27,13 @@ class AddFriendButton extends StatelessWidget {
           ),
           side: BorderSide(
             width: isFriend ? 4 : 3,
-            color: isFriend ? ColorManager.colorPrimary : Colors.grey,
+            color: isFriend ? ColorManager.colorPrimary : ColorManager.colorPrimary,
           ),
           // backgroundColor: isLoading ? Colors.green.shade200 : ColorManager.colorBG,
         ),
         child: isLoading
             ? SpinKitThreeBounce(
-                color: isFriend ? ColorManager.colorPrimary : Colors.grey,
+                color: isFriend ? ColorManager.colorPrimary : ColorManager.colorPrimary,
                 size: 25,
               )
             : Row(
@@ -42,7 +42,7 @@ class AddFriendButton extends StatelessWidget {
                   Icon(
                     isFriend ? Icons.favorite_rounded : Icons.group_add_rounded,
                     size: 40,
-                    color: isFriend ? ColorManager.colorPrimary : Colors.grey,
+                    color: isFriend ? ColorManager.colorPrimary : ColorManager.colorPrimary,
                   ),
                   SizedBox(
                     width: 80,
@@ -51,7 +51,7 @@ class AddFriendButton extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 25,
                         color:
-                            isFriend ? ColorManager.colorPrimary : Colors.grey,
+                            isFriend ? ColorManager.colorPrimary : ColorManager.colorPrimary,
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.center,

@@ -20,6 +20,9 @@ class ProfileTab extends StatefulWidget {
 class _ProfileTabState extends State<ProfileTab>
     with AutomaticKeepAliveClientMixin {
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
     super.initState();
 
@@ -30,9 +33,6 @@ class _ProfileTabState extends State<ProfileTab>
       setState(() {});
     };
   }
-
-  @override
-  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
