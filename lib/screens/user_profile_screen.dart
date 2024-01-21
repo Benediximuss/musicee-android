@@ -47,7 +47,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       appBar: widget.showAppBar
           ? AppBar(
               title: const Text(
-                'Profile',
+                'User Profile',
               ),
             )
           : null,
@@ -87,37 +87,45 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         buttonIcon: Icons.thumb_up,
                         buttonValue: _userDetails.likedSongs!.length.toString(),
                         onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            Routes.userLikesScreen,
-                            arguments: {
-                              'username': _userDetails.username!,
-                            },
-                          ).then(
-                            (_) {
-                              _refresh();
-                            },
-                          );
+                          _showLikesLogic(context);
                         },
+                        iconSize: 25,
                       ),
                       CustomIconButton(
+                        buttonText: 'Playlists',
+                        buttonIcon: Icons.playlist_play_rounded,
+                        // buttonValue: _userDetails.playlists!.length.toString(),
+                        onPressed: () {
+                          _showPlaylistsLogic(context);
+                        },
+                        width: 175,
+                        iconSize: 30,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      CustomIconButton(
                         buttonText: 'Friends',
-                        buttonIcon: Icons.people_alt_outlined,
+                        buttonIcon: Icons.people_alt_rounded,
                         buttonValue: _userDetails.friends!.length.toString(),
                         onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            Routes.userFriendsScreen,
-                            arguments: {
-                              'username': _userDetails.username!,
-                              'friendsList': _userDetails.friends!,
-                            },
-                          ).then(
-                            (_) {
-                              _refresh();
-                            },
-                          );
+                          _showFriendsLogic(context);
                         },
+                        iconSize: 25,
+                      ),
+                      CustomIconButton(
+                        buttonText: 'Comments',
+                        buttonIcon: Icons.comment_rounded,
+                        buttonValue: _userDetails.comments!.length.toString(),
+                        onPressed: () {
+                          _showCommentsLogic(context);
+                        },
+                        width: 175,
+                        fontSize: 20,
+                        iconSize: 25,
                       ),
                     ],
                   ),
@@ -142,6 +150,35 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     );
   }
 
+  void _showLikesLogic(BuildContext context) {
+    Navigator.pushNamed(
+      context,
+      Routes.userLikesScreen,
+      arguments: {
+        'username': _userDetails.username!,
+      },
+    ).then(
+      (_) {
+        _refresh();
+      },
+    );
+  }
+
+  void _showFriendsLogic(BuildContext context) {
+    Navigator.pushNamed(
+      context,
+      Routes.userFriendsScreen,
+      arguments: {
+        'username': _userDetails.username!,
+        'friendsList': _userDetails.friends!,
+      },
+    ).then(
+      (_) {
+        _refresh();
+      },
+    );
+  }
+
   void _addFriendLogic() async {
     setState(() {
       _isButtonLoading = true;
@@ -158,5 +195,21 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       });
       print("3131: Error adding!!! $error");
     });
+  }
+
+  void _showPlaylistsLogic(BuildContext context) {}
+
+  void _showCommentsLogic(BuildContext context) {
+    Navigator.pushNamed(
+      context,
+      Routes.userCommentsScreen,
+      arguments: {
+        'username': _userDetails.username!,
+      },
+    ).then(
+      (_) {
+        _refresh();
+      },
+    );;
   }
 }

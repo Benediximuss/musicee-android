@@ -11,7 +11,8 @@ class CustomIconButton extends StatelessWidget {
     required this.onPressed,
     this.fontSize = 25,
     this.iconSize = 30,
-    this.borderRadius = 15,
+    this.valueFontSize = 25,
+    this.borderRadius = 10,
   }) : super(key: key);
 
   final String buttonText;
@@ -22,6 +23,7 @@ class CustomIconButton extends StatelessWidget {
   final double width;
   final double fontSize;
   final double iconSize;
+  final double valueFontSize;
   final double borderRadius;
 
   @override
@@ -46,13 +48,13 @@ class CustomIconButton extends StatelessWidget {
                 children: [
                   Icon(
                     buttonIcon,
-                    size: fontSize,
+                    size: iconSize,
                   ),
                   const SizedBox(width: 2),
                   Text(
                     buttonValue!,
                     style: TextStyle(
-                      fontSize: fontSize,
+                      fontSize: valueFontSize,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

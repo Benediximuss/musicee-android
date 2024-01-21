@@ -102,6 +102,20 @@ class TrackCardVerticalList extends StatelessWidget {
                             color: Colors.grey,
                           ),
                         ),
+                        const SizedBox(width: 15),
+                        const Icon(
+                          Icons.comment,
+                          size: 18,
+                          color: Colors.black54,
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          trackDetails.comments!.length.toString(),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.grey,
+                          ),
+                        ),
                       ],
                     ),
                   ],

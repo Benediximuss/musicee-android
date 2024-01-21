@@ -3,7 +3,6 @@ import 'package:musicee_app/models/track_model.dart';
 import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/widgets/components/elevated_icon.dart';
 import 'package:musicee_app/widgets/lists/track_list_view.dart';
-
 import 'package:musicee_app/widgets/loaders/future_builder_with_loader.dart';
 
 class AlbumScreen extends StatefulWidget {
@@ -53,17 +52,16 @@ class _AlbumScreenState extends State<AlbumScreen> {
                         ),
                         const SizedBox(height: 30),
                         SizedBox(
-                          width: 350,
-                          child: Text(
-                            widget.albumName,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 36,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
-                          )
-                        ),
+                            width: 350,
+                            child: Text(
+                              widget.albumName,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 36,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            )),
                         const SizedBox(height: 5),
                         const Text(
                           'by',

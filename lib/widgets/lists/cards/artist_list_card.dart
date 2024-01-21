@@ -18,21 +18,21 @@ class ArtistListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(
-          context,
-          Routes.artistTracksScreen,
-          arguments: {
-            'artistName': artistName,
-          },
-        ).then(
-          (_) {
-            if (refreshListScreen != null) {
-              refreshListScreen!();
-            } else {
-              print("3131: then null refresh!");
-            }
-          },
-        );
+        // Navigator.pushNamed(
+        //   context,
+        //   Routes.artistTracksScreen,
+        //   arguments: {
+        //     'artistName': artistName,
+        //   },
+        // ).then(
+        //   (_) {
+        //     if (refreshListScreen != null) {
+        //       refreshListScreen!();
+        //     } else {
+        //       print("3131: then null refresh!");
+        //     }
+        //   },
+        // );
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10.0),

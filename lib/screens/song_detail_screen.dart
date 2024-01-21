@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/models/track_model.dart';
 import 'package:musicee_app/routes/routes.dart';
-import 'package:musicee_app/screens/album_screen.dart';
-import 'package:musicee_app/screens/artist_screen.dart';
 import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/services/auth/auth_manager.dart';
 import 'package:musicee_app/utils/color_manager.dart';
@@ -17,7 +15,10 @@ import 'package:musicee_app/widgets/confirm_dialog.dart';
 class SongDetailScreen extends StatefulWidget {
   final String trackID;
 
-  const SongDetailScreen({Key? key, required this.trackID}) : super(key: key);
+  const SongDetailScreen({
+    super.key,
+    required this.trackID,
+  });
 
   @override
   _SongDetailScreenState createState() => _SongDetailScreenState();
@@ -62,7 +63,7 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
         appBar: AppBar(
           title: const Text('Song Details'),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context, _isChanged);
             },
@@ -222,13 +223,12 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
                             buttonText: 'See artist',
                             buttonIcon: Icons.people_alt_rounded,
                             onPressed: () {
-                              Navigator.push(
+                              Navigator.pushNamed(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (context) => ArtistScreen(
-                                    artistName: _trackDetails.trackArtist.first,
-                                  ),
-                                ),
+                                Routes.artistScreen,
+                                arguments: {
+                                  'artistName': _trackDetails.trackArtist.first,
+                                },
                               );
                             },
                           ),
@@ -255,13 +255,12 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
                               },
                             ),
                             onSelected: (value) {
-                              Navigator.push(
+                              Navigator.pushNamed(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (context) => ArtistScreen(
-                                    artistName: value,
-                                  ),
-                                ),
+                                Routes.artistScreen,
+                                arguments: {
+                                  'artistName': value,
+                                },
                               );
                             },
                             itemBuilder: (context) => _trackDetails.trackArtist
@@ -283,21 +282,19 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
                           buttonText: 'See album',
                           buttonIcon: Icons.album_rounded,
                           onPressed: () {
-                            Navigator.push(
+                            Navigator.pushNamed(
                               context,
-                              MaterialPageRoute(
-                                builder: (context) => AlbumScreen(
-                                  albumName: _trackDetails.trackAlbum,
-                                  artistName: _trackDetails.trackArtist.first,
-                                ),
-                              ),
+                              Routes.albumScreen,
+                              arguments: {
+                                'albumName': _trackDetails.trackAlbum,
+                                'artistName': _trackDetails.trackArtist.first,
+                              },
                             );
                           },
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 6),
                   Column(
                     children: [
                       Row(
@@ -315,6 +312,7 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
                                 },
                               );
                             },
+                            borderRadius: 15,
                           ),
                           CustomIconButton(
                             buttonText: 'Delete',
@@ -322,6 +320,7 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
                             onPressed: () {
                               _deleteLogic(context);
                             },
+                            borderRadius: 15,
                           ),
                         ],
                       ),
@@ -334,10 +333,30 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
                             isLiked: _isLiked,
                             onPressed: _likeLogic,
                           ),
+                          const SizedBox(width: 15),
+                          CustomIconButton(
+                            buttonText: 'Comments',
+                            buttonIcon: Icons.comment_rounded,
+                            buttonValue:
+                                _trackDetails.comments!.length.toString(),
+                            onPressed: () {
+                              _showCommentsLogic(context);
+                            },
+                            width: 175,
+                            fontSize: 20,
+                            iconSize: 25,
+                          ),
                         ],
                       ),
                     ],
                   ),
+                  // const Column(
+                  //   children: [
+                  //     ElevatedIcon(
+                  //       iconData: Icons.comment,
+                  //     )
+                  //   ],
+                  // ),
                 ],
               ),
             );
@@ -398,6 +417,28 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
         _futureModel = updateAndGetList();
       });
       print("3131: Error liking!!! $error");
+    });
+  }
+
+  void _showCommentsLogic(BuildContext context) {
+    Navigator.pushNamed(
+      context,
+      Routes.trackCommentsScreen,
+      arguments: {
+        'trackDetails': _trackDetails,
+      },
+    ).then((value) {
+      if (value == true) {
+        setState(() {
+          _futureModel = updateAndGetList();
+          _isChanged = true;
+        });
+      }
+    }).catchError((error) {
+      setState(() {
+        _futureModel = updateAndGetList();
+        _isChanged = true;
+      });
     });
   }
 }

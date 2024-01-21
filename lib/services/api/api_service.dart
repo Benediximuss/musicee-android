@@ -274,8 +274,7 @@ class APIService {
             jsonList.map((json) => json.toString()).toList();
         return returnval;
       } else {
-        throw Exception(
-            'Failed to get data from server (Status code: ${response.statusCode})');
+        return [];
       }
     } catch (error) {
       return Future.error(error);
@@ -397,6 +396,30 @@ class APIService {
         List<TrackModel> returnval =
             jsonList.map((json) => TrackModel.fromJson(json)).toList();
         return returnval;
+      } else {
+        throw Exception(
+            'Failed to get data from server (Status code: ${response.statusCode})');
+      }
+    } catch (error) {
+      return Future.error(error);
+    }
+  }
+
+  static Future<dynamic> postComment(
+      String username, String trackID, String comment) async {
+    String url = ApiEndpointManager.tracks(TracksEndpoints.POST_COMMENT);
+
+    try {
+      final response = await httpClient.post(Uri.parse(url).replace(
+        queryParameters: {
+          'user_name': username,
+          'track_id': trackID,
+          'comment_text': comment,
+        },
+      ));
+
+      if (response.statusCode == 200) {
+        return;
       } else {
         throw Exception(
             'Failed to get data from server (Status code: ${response.statusCode})');

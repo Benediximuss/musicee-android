@@ -11,10 +11,12 @@ class RecommendationsList extends StatefulWidget {
     Key? key,
     required this.listTitle,
     required this.futureTrackIDs,
+    required this.emptyMsg,
   }) : super(key: key);
 
   final String listTitle;
   final Future<List<String>> futureTrackIDs;
+  final String emptyMsg;
 
   @override
   _RecommendationsListState createState() => _RecommendationsListState();
@@ -57,7 +59,7 @@ class _RecommendationsListState extends State<RecommendationsList> {
                           size: 50,
                         ),
                         Text(
-                          'No recommendations\ntry adding some friends',
+                          widget.emptyMsg,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w600,

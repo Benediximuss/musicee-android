@@ -82,19 +82,21 @@ class _ExploreTabState extends State<ExploreTab>
                       futureTrackIDs: APIService.recommendTracks(
                         AuthManager.getUsername(),
                       ),
+                      emptyMsg: 'No recommendations\ntry liking some songs',
                     ),
                     RecommendationsList(
                       listTitle: 'Recommendations based on your friends',
                       futureTrackIDs: APIService.recommendFriendsTracks(
                         AuthManager.getUsername(),
                       ),
+                      emptyMsg: 'No recommendations\ntry adding some friends',
                     ),
-                    RecommendationsListArtists(
-                      listTitle: 'Reccommended Artists',
-                      futureArtistNames: APIService.recommendArtists(
-                        'uguroztunc', //AuthManager.getUsername(),
-                      ),
-                    ),
+                    // RecommendationsListArtists(
+                    //   listTitle: 'Reccommended Artists',
+                    //   futureArtistNames: APIService.recommendArtists(
+                    //     'uguroztunc', //AuthManager.getUsername(),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

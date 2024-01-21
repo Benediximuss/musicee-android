@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musicee_app/models/track_model.dart';
 import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/utils/color_manager.dart';
+import 'package:musicee_app/widgets/components/elevated_icon.dart';
 import 'package:musicee_app/widgets/loaders/future_builder_with_loader.dart';
 import 'package:musicee_app/widgets/lists/track_list_view.dart';
 
@@ -45,11 +46,34 @@ class _UserLikesScreenState extends State<UserLikesScreen> {
         future: _getLikedsOf(widget.username),
         onComplete: (snapshot) {
           _tracksList = snapshot.data as List<TrackModel>;
-          return TrackListView(
-            tracksList: _tracksList,
-            refreshListScreen: _refresh,
-            direction: Axis.vertical,
-          );
+          if (_tracksList.isNotEmpty) {
+            return TrackListView(
+              tracksList: _tracksList,
+              refreshListScreen: _refresh,
+              direction: Axis.vertical,
+            );
+          } else {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const ElevatedIcon(
+                    iconData: Icons.lyrics_outlined,
+                    size: 50,
+                  ),
+                  const SizedBox(height: 30),
+                  Text(
+                    'No songs here!',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black.withOpacity(0.8),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
         },
       ),
     );

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:musicee_app/models/track_model.dart';
 import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/utils/asset_manager.dart';
 import 'package:musicee_app/widgets/components/elevated_icon.dart';
 import 'package:musicee_app/widgets/lists/track_list_view.dart';
-
 import 'package:musicee_app/widgets/loaders/future_builder_with_loader.dart';
 
 class ArtistScreen extends StatefulWidget {
@@ -63,7 +61,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
                               fontWeight: FontWeight.bold,
                               color: Colors.black87,
                             ),
-                          )
+                          ),
                         ),
                       ],
                     )

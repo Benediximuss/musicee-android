@@ -35,6 +35,16 @@ class _AllTracksScreenState extends State<AllTracksScreen> {
               size: 30,
             ),
           ),
+          TextButton(
+            onPressed: () {
+              _deleteAll();
+            },
+            child: const Icon(
+              Icons.clear_all_rounded,
+              color: ColorManager.colorAppBarText,
+              size: 30,
+            ),
+          ),
         ],
       ),
       body: FutureBuilderWithLoader(
@@ -49,5 +59,11 @@ class _AllTracksScreenState extends State<AllTracksScreen> {
         },
       ),
     );
+  }
+
+  void _deleteAll() {
+    for (var track in _tracksList) {
+      APIService.deleteTrack(track.trackId!);
+    }
   }
 }

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/routes/routes.dart';
+import 'package:musicee_app/screens/album_screen.dart';
 import 'package:musicee_app/screens/all_tracks_screen.dart';
-import 'package:musicee_app/screens/artist_tracks_screen.dart';
+import 'package:musicee_app/screens/artist_screen.dart';
 import 'package:musicee_app/screens/home_screen.dart';
 import 'package:musicee_app/screens/sign_up_screen.dart';
 import 'package:musicee_app/screens/sign_in_screen.dart';
 import 'package:musicee_app/screens/song_detail_screen.dart';
+import 'package:musicee_app/screens/track_comments_screen.dart';
 import 'package:musicee_app/screens/update_track_screen.dart';
+import 'package:musicee_app/screens/user_comments_screen.dart';
 import 'package:musicee_app/screens/user_friends_screen.dart';
 import 'package:musicee_app/screens/user_likes_screen.dart';
 import 'package:musicee_app/screens/user_profile_screen.dart';
@@ -94,12 +97,34 @@ class AppRouter {
           ),
           settings: const RouteSettings(name: Routes.updateTrackScreen),
         );
-      case Routes.artistTracksScreen:
+      case Routes.artistScreen:
         return MaterialPageRoute(
-          builder: (_) => ArtistTracksScreen(
+          builder: (_) => ArtistScreen(
             artistName: arguments['artistName'],
           ),
-          settings: const RouteSettings(name: Routes.artistTracksScreen),
+          settings: const RouteSettings(name: Routes.artistScreen),
+        );
+      case Routes.albumScreen:
+        return MaterialPageRoute(
+          builder: (_) => AlbumScreen(
+            albumName: arguments['albumName'],
+            artistName: arguments['artistName'],
+          ),
+          settings: const RouteSettings(name: Routes.albumScreen),
+        );
+      case Routes.trackCommentsScreen:
+        return MaterialPageRoute(
+          builder: (_) => TrackCommentsScreen(
+            trackDetails: arguments['trackDetails'],
+          ),
+          settings: const RouteSettings(name: Routes.trackCommentsScreen),
+        );
+      case Routes.userCommentsScreen:
+        return MaterialPageRoute(
+          builder: (_) => UserCommentsScreen(
+            username: arguments['username'],
+          ),
+          settings: const RouteSettings(name: Routes.userCommentsScreen),
         );
       default:
         return MaterialPageRoute(
