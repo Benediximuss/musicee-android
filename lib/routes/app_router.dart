@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/routes/routes.dart';
+import 'package:musicee_app/screens/add_json_screen.dart';
 import 'package:musicee_app/screens/album_screen.dart';
 import 'package:musicee_app/screens/all_tracks_screen.dart';
 import 'package:musicee_app/screens/artist_screen.dart';
@@ -12,6 +13,7 @@ import 'package:musicee_app/screens/update_track_screen.dart';
 import 'package:musicee_app/screens/user_comments_screen.dart';
 import 'package:musicee_app/screens/user_friends_screen.dart';
 import 'package:musicee_app/screens/user_likes_screen.dart';
+import 'package:musicee_app/screens/user_playlists_screen.dart';
 import 'package:musicee_app/screens/user_profile_screen.dart';
 import 'package:musicee_app/screens/welcome_screen.dart';
 import 'package:musicee_app/screens/add_track_screen.dart';
@@ -125,6 +127,19 @@ class AppRouter {
             username: arguments['username'],
           ),
           settings: const RouteSettings(name: Routes.userCommentsScreen),
+        );
+      case Routes.playlistsScreen:
+        return MaterialPageRoute(
+          builder: (_) => UserPlaylistsScreen(
+            username: arguments['username'],
+            isSelf: arguments['isSelf'],
+          ),
+          settings: const RouteSettings(name: Routes.playlistsScreen),
+        );
+      case Routes.addJsonScreen:
+        return MaterialPageRoute(
+          builder: (_) => const AddJsonScreen(),
+          settings: const RouteSettings(name: Routes.addJsonScreen),
         );
       default:
         return MaterialPageRoute(

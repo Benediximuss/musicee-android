@@ -199,14 +199,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   void _showPlaylistsLogic(BuildContext context) {
-    Navigator.push(
+    Navigator.pushNamed(
       context,
-      MaterialPageRoute(
-        builder: (context) => UserPlaylistsScreen(
-          username: _userDetails.username!,
-          isSelf: _userDetails.username! == AuthManager.getUsername(),
-        ),
-      ),
+      Routes.playlistsScreen,
+      arguments: {
+        'username': _userDetails.username!,
+        'isSelf': _userDetails.username! == AuthManager.getUsername(),
+      },
     );
   }
 

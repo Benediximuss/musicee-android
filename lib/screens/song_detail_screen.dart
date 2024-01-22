@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musicee_app/models/playlist_model.dart';
 import 'package:musicee_app/models/track_model.dart';
 import 'package:musicee_app/routes/routes.dart';
 import 'package:musicee_app/services/api/api_service.dart';
@@ -74,7 +75,7 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
                 Icons.add_rounded,
               ),
               onPressed: () {
-                _addLogic();
+                _addToPlaylist();
               },
             ),
           ],
@@ -246,15 +247,15 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
                           PopupMenuButton<String>(
                             key: _popupMenu,
                             color: ColorManager.colorBG,
-                            offset: const Offset(-10, 0),
+                            offset: const Offset(10, 0),
                             elevation: 12,
-                            shape: OutlineInputBorder(
+                            shape: const OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: Colors.grey.shade700,
+                                color: ColorManager.colorPrimary,
                                 width: 2,
                               ),
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(16),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(8),
                               ),
                             ),
                             child: CustomIconButtonMini(
@@ -445,5 +446,82 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
     });
   }
 
-  void _addLogic() {}
+  bool _isAlreadyInPlaylist(PlaylistModel playlist) {
+    for (String trackID in playlist.trackIDs) {
+      if (trackID == _trackDetails.trackId) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void _addToPlaylist() async {
+    final userModel =
+        await APIService.getUserDetails(AuthManager.getUsername());
+
+    List<PopupMenuEntry<dynamic>> list = [];
+
+    if (userModel.playlists!.isNotEmpty) {
+      for (int i = 0; i < userModel.playlists!.length; i++) {
+        list.add(
+          PopupMenuItem<int>(
+            value: i,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  userModel.playlists![i].listName,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.grey.shade900,
+                  ),
+                ),
+                Builder(
+                  builder: (context) {
+                    if (!_isAlreadyInPlaylist(userModel.playlists![i])) {
+                      return Icon(
+                        Icons.playlist_add,
+                        color: Colors.green.shade700,
+                      );
+                    } else {
+                      return Icon(
+                        Icons.playlist_remove,
+                        color: ColorManager.darkerSwatch.shade200,
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    }
+
+    // ignore: use_build_context_synchronously
+    int selectedList = await showMenu(
+      context: context,
+      position: const RelativeRect.fromLTRB(
+          400, 80, 0, 0), // Adjust the position as needed
+      items: list,
+    );
+
+    print(
+        "3131: Selected playlist: ${userModel.playlists![selectedList].listName}");
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    APIService.addPlaylist(
+      AuthManager.getUsername(),
+      userModel.playlists![selectedList].listName,
+      _trackDetails.trackId!,
+    ).then((value) {
+      setState(() {
+        _isLoading = false;
+        _futureModel = updateAndGetList();
+      });
+    });
+  }
 }

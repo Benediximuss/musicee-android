@@ -16,4 +16,6 @@ class Routes {
   static const albumScreen = 'albumTracks';
   static const trackCommentsScreen = 'trackComments';
   static const userCommentsScreen = 'userComments';
+  static const addJsonScreen = 'addJson';
+  static const playlistsScreen = 'playlists';
 }

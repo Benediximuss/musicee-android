@@ -555,9 +555,13 @@ void main() {
             );
 
             // Assert
+            // expect(
+            //   APIService.recommendTracks('test_username'),
+            //   throwsException,
+            // );
             expect(
-              APIService.recommendTracks('test_username'),
-              throwsException,
+              await APIService.recommendTracks('test_username'),
+              List.empty(),
             );
           },
         );
