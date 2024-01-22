@@ -4,36 +4,61 @@ import 'package:musicee_app/routes/routes.dart';
 import 'package:musicee_app/utils/color_manager.dart';
 
 class TrackCardHorizontalList extends StatelessWidget {
-  const TrackCardHorizontalList({
+  TrackCardHorizontalList({
     Key? key,
     required this.trackDetails,
     required this.refreshListScreen,
+    this.onLongPress,
   }) : super(key: key);
 
   final TrackModel trackDetails;
   final void Function()? refreshListScreen;
+  final void Function(String)? onLongPress;
+
+  final _popupMenu = GlobalKey<PopupMenuButtonState>();
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(
-          context,
-          Routes.songDetailsScreen,
-          arguments: {
-            'trackID': trackDetails.trackId,
-          },
-        ).then(
-          (_) {
-            if (refreshListScreen != null) {
-              refreshListScreen!();
-            } else {
-              print("3131: then null refresh!");
-            }
-          },
-        );
-      },
-      child: Padding(
+    return PopupMenuButton<String>(
+      onSelected: (trackId) => onLongPress!(trackId),
+      key: _popupMenu,
+      color: ColorManager.lighterSwatch.shade200,
+      elevation: 12,
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+        PopupMenuItem<String>(
+          value: trackDetails.trackId,
+          child: Text(
+            'Remove from playlist',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.grey.shade800,
+            ),
+          ),
+        ),
+      ],
+      child: GestureDetector(
+        // onLongPress: () => onLongPress!(trackDetails.trackId!),
+        onLongPress: () {
+          _popupMenu.currentState?.showButtonMenu();
+        },
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            Routes.songDetailsScreen,
+            arguments: {
+              'trackID': trackDetails.trackId,
+            },
+          ).then(
+            (_) {
+              if (refreshListScreen != null) {
+                refreshListScreen!();
+              } else {
+                print("3131: then null refresh!");
+              }
+            },
+          );
+        },
+        child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: Container(
             width: 150,
@@ -117,13 +142,29 @@ class TrackCardHorizontalList extends StatelessWidget {
                           color: Colors.black54,
                         ),
                       ),
+                      const SizedBox(width: 15),
+                      const Icon(
+                        Icons.comment,
+                        size: 18,
+                        color: Colors.black54,
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        trackDetails.comments!.length.toString(),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.black54,
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 5),
                 ],
               ),
             ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 }

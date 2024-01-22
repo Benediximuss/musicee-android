@@ -42,6 +42,8 @@ final class ApiEndpointManager {
       case TracksEndpoints.RECOMMEND_FRIENDS_TRACKS: return '$path/recommend_friend_track';
       case TracksEndpoints.RECOMMEND_ARTISTS: return '$path/recommend_artist_track';
       case TracksEndpoints.POST_COMMENT: return '$path/post_comment';
+      case TracksEndpoints.ADD_PLAYLIST: return '$path/add_playlist';
+      case TracksEndpoints.DELETE_PLAYLIST: return '$path/delete_playlist';
     }
   }
 
@@ -87,6 +89,8 @@ enum TracksEndpoints {
   RECOMMEND_FRIENDS_TRACKS,
   RECOMMEND_ARTISTS,
   POST_COMMENT,
+  ADD_PLAYLIST,
+  DELETE_PLAYLIST,
 }
 
 enum ArtistEndpoints {

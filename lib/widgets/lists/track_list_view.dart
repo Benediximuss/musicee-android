@@ -4,16 +4,18 @@ import 'package:musicee_app/widgets/lists/cards/track_card_horizontal_list.dart'
 import 'package:musicee_app/widgets/lists/cards/track_card_vertical_list.dart';
 
 class TrackListView extends StatelessWidget {
-  final List<TrackModel> tracksList;
-  final void Function()? refreshListScreen;
-  final Axis direction;
-
   const TrackListView({
-    Key? key,
+    super.key,
     required this.tracksList,
     this.refreshListScreen,
     required this.direction,
-  }) : super(key: key);
+    this.onLongPress,
+  });
+
+  final List<TrackModel> tracksList;
+  final void Function()? refreshListScreen;
+  final Axis direction;
+  final void Function(String)? onLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,7 @@ class TrackListView extends StatelessWidget {
           return TrackCardHorizontalList(
             trackDetails: tracksList[index],
             refreshListScreen: refreshListScreen,
+            onLongPress: onLongPress,
           );
         }
       },

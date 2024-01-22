@@ -68,6 +68,16 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
               Navigator.pop(context, _isChanged);
             },
           ),
+          actions: [
+            IconButton(
+              icon: const Icon(
+                Icons.add_rounded,
+              ),
+              onPressed: () {
+                _addLogic();
+              },
+            ),
+          ],
         ),
         body: FutureBuilderWithLoader(
           future: _futureModel,
@@ -350,13 +360,6 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
                       ),
                     ],
                   ),
-                  // const Column(
-                  //   children: [
-                  //     ElevatedIcon(
-                  //       iconData: Icons.comment,
-                  //     )
-                  //   ],
-                  // ),
                 ],
               ),
             );
@@ -441,4 +444,6 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
       });
     });
   }
+
+  void _addLogic() {}
 }

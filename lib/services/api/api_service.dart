@@ -406,7 +406,10 @@ class APIService {
   }
 
   static Future<dynamic> postComment(
-      String username, String trackID, String comment) async {
+    String username,
+    String trackID,
+    String comment,
+  ) async {
     String url = ApiEndpointManager.tracks(TracksEndpoints.POST_COMMENT);
 
     try {
@@ -415,6 +418,58 @@ class APIService {
           'user_name': username,
           'track_id': trackID,
           'comment_text': comment,
+        },
+      ));
+
+      if (response.statusCode == 200) {
+        return;
+      } else {
+        throw Exception(
+            'Failed to get data from server (Status code: ${response.statusCode})');
+      }
+    } catch (error) {
+      return Future.error(error);
+    }
+  }
+
+  static Future<dynamic> addPlaylist(
+    String username,
+    String playlistName,
+    String trackID,
+  ) async {
+    String url = ApiEndpointManager.tracks(TracksEndpoints.ADD_PLAYLIST);
+
+    try {
+      final response = await httpClient.post(Uri.parse(url).replace(
+        queryParameters: {
+          'user_name': username,
+          'playlist_name': playlistName,
+          'track_id': trackID,
+        },
+      ));
+
+      if (response.statusCode == 200) {
+        return;
+      } else {
+        throw Exception(
+            'Failed to get data from server (Status code: ${response.statusCode})');
+      }
+    } catch (error) {
+      return Future.error(error);
+    }
+  }
+
+  static Future<dynamic> deletePlaylist(
+    String username,
+    String playlistName,
+  ) async {
+    String url = ApiEndpointManager.tracks(TracksEndpoints.DELETE_PLAYLIST);
+
+    try {
+      final response = await httpClient.delete(Uri.parse(url).replace(
+        queryParameters: {
+          'user_name': username,
+          'playlist_name': playlistName,
         },
       ));
 

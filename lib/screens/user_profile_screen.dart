@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/models/user_detail_model.dart';
 import 'package:musicee_app/routes/routes.dart';
+import 'package:musicee_app/screens/user_playlists_screen.dart';
 import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/services/auth/auth_manager.dart';
 import 'package:musicee_app/widgets/components/add_friend_button.dart';
@@ -94,7 +95,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       CustomIconButton(
                         buttonText: 'Playlists',
                         buttonIcon: Icons.playlist_play_rounded,
-                        // buttonValue: _userDetails.playlists!.length.toString(),
+                        buttonValue: _userDetails.playlists!.length.toString(),
                         onPressed: () {
                           _showPlaylistsLogic(context);
                         },
@@ -197,7 +198,17 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     });
   }
 
-  void _showPlaylistsLogic(BuildContext context) {}
+  void _showPlaylistsLogic(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => UserPlaylistsScreen(
+          username: _userDetails.username!,
+          isSelf: _userDetails.username! == AuthManager.getUsername(),
+        ),
+      ),
+    );
+  }
 
   void _showCommentsLogic(BuildContext context) {
     Navigator.pushNamed(
@@ -210,6 +221,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       (_) {
         _refresh();
       },
-    );;
+    );
+    ;
   }
 }
