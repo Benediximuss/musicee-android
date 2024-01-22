@@ -17,6 +17,9 @@ final class ApiEndpointManager {
     switch (endpoint) {
       case UserEndpoints.SIGNUP: return '$path/signup';
       case UserEndpoints.LOGIN: return '$path/login';
+      case UserEndpoints.STAT_GENRE: return '$path/get_like_genre';
+      case UserEndpoints.STAT_ARTIST: return '$path/get_like_artist';
+      case UserEndpoints.STAT_FRIENDS: return '$path/get_like_friends';
     }
   }
 
@@ -61,6 +64,12 @@ final class ApiEndpointManager {
     }
   }
 
+  static String top(TopEndpoints endpoint) {
+    switch (endpoint) {
+      case TopEndpoints.POPULAR: return '$_baseUrl/popular_genre';
+    }
+  }
+
 }
 
 enum ApiEndpoints {
@@ -70,6 +79,9 @@ enum ApiEndpoints {
 enum UserEndpoints {
   SIGNUP,
   LOGIN,
+  STAT_GENRE,
+  STAT_ARTIST,
+  STAT_FRIENDS,
 }
 
 enum UsersEndpoints {
@@ -99,4 +111,8 @@ enum ArtistEndpoints {
 
 enum AlbumEndpoints {
   TRACKS,
+}
+
+enum TopEndpoints {
+  POPULAR,
 }

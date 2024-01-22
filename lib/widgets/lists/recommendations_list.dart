@@ -39,110 +39,110 @@ class _RecommendationsListState extends State<RecommendationsList> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Container(
-          decoration: BoxDecoration(
+        decoration: BoxDecoration(
             color: ColorManager.lighterSwatch.shade200,
             borderRadius: const BorderRadius.all(
               Radius.circular(12),
             ),
             border: Border.all(
               color: Colors.black12,
-            )
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Builder(
-                  builder: (context) {
-                    if (!widget.isPlaylist) {
-                      return Text(
-                        widget.listTitle,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black.withOpacity(0.7),
+            )),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Builder(
+                builder: (context) {
+                  if (!widget.isPlaylist) {
+                    return Text(
+                      widget.listTitle,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black.withOpacity(0.7),
+                      ),
+                    );
+                  } else {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          widget.listTitle,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black.withOpacity(0.7),
+                          ),
                         ),
-                      );
-                    } else {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            widget.listTitle,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black.withOpacity(0.7),
-                            ),
+                        PopupMenuButton<String>(
+                          color: ColorManager.lighterSwatch.shade200,
+                          elevation: 12,
+                          child: const Icon(
+                            Icons.more_vert,
                           ),
-                          PopupMenuButton<String>(
-                            color: ColorManager.lighterSwatch.shade200,
-                            elevation: 12,
-                            child: const Icon(
-                              Icons.more_vert,
-                            ),
-                            onSelected: (String item) =>
-                                widget.deletePlaylist!(item),
-                            itemBuilder: (BuildContext context) =>
-                                <PopupMenuEntry<String>>[
-                              PopupMenuItem<String>(
-                                value: widget.listTitle,
-                                child: Text(
-                                  'Delete playlist',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.grey.shade800,
-                                  ),
+                          onSelected: (String item) =>
+                              widget.deletePlaylist!(item),
+                          itemBuilder: (BuildContext context) =>
+                              <PopupMenuEntry<String>>[
+                            PopupMenuItem<String>(
+                              value: widget.listTitle,
+                              child: Text(
+                                'Delete playlist',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.grey.shade800,
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      );
-                    }
-                  },
-                ),
-              ),
-              SizedBox(
-                height: 250,
-                child: FutureBuilderWithLoader(
-                  future: _getRecommendations(AuthManager.getUsername()),
-                  onComplete: (snapshot) {
-                    _tracksList = snapshot.data as List<TrackModel>;
-                    if (_tracksList.isEmpty) {
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            const ElevatedIcon(
-                              iconData: Icons.lyrics_outlined,
-                              size: 50,
-                            ),
-                            Text(
-                              widget.emptyMsg,
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black.withOpacity(0.8),
                               ),
                             ),
                           ],
                         ),
-                      );
-                    } else {
-                      return TrackListView(
-                        tracksList: _tracksList,
-                        direction: Axis.horizontal,
-                        onLongPress: widget.onLongPress,
-                        refreshListScreen: widget.refreshListScreen,
-                      );
-                    }
-                  },
-                ),
+                      ],
+                    );
+                  }
+                },
               ),
-            ],
-          )),
+            ),
+            SizedBox(
+              height: 250,
+              child: FutureBuilderWithLoader(
+                future: _getRecommendations(AuthManager.getUsername()),
+                onComplete: (snapshot) {
+                  _tracksList = snapshot.data as List<TrackModel>;
+                  if (_tracksList.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          const ElevatedIcon(
+                            iconData: Icons.lyrics_outlined,
+                            size: 50,
+                          ),
+                          Text(
+                            widget.emptyMsg,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black.withOpacity(0.8),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return TrackListView(
+                      tracksList: _tracksList,
+                      direction: Axis.horizontal,
+                      onLongPress: widget.onLongPress,
+                      refreshListScreen: widget.refreshListScreen,
+                    );
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

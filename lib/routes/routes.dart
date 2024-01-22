@@ -18,4 +18,5 @@ class Routes {
   static const userCommentsScreen = 'userComments';
   static const addJsonScreen = 'addJson';
   static const playlistsScreen = 'playlists';
+  static const topSongsScreen = 'topSongs';
 }

@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:musicee_app/models/genre_model.dart';
 import 'package:musicee_app/models/track_model.dart';
 import 'package:musicee_app/models/user_detail_model.dart';
 import 'package:musicee_app/services/api/api_endpoint_manager.dart';
@@ -475,6 +476,136 @@ class APIService {
 
       if (response.statusCode == 200) {
         return;
+      } else {
+        throw Exception(
+            'Failed to get data from server (Status code: ${response.statusCode})');
+      }
+    } catch (error) {
+      return Future.error(error);
+    }
+  }
+
+  static Future<List<GenreModel>> topSongs() async {
+    String url = ApiEndpointManager.top(TopEndpoints.POPULAR);
+
+    try {
+      final response = await httpClient.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> topjson = json
+            .decode(utf8.decode(response.bodyBytes))['top_3_tracks_by_genre'];
+
+        List<GenreModel> returnval = [];
+
+        topjson.forEach((genreName, tracksList) {
+          // List<TrackModel> topTracks =
+          //     tracksList.map((json) => TrackModel.fromJson(json)).toList();
+
+          List<TrackModel> topTracks = [];
+
+          tracksList.forEach((trackData) {
+            topTracks.add(TrackModel.fromJson(trackData));
+          });
+
+          returnval.add(
+            GenreModel(
+              genreName: genreName,
+              topTracks: topTracks,
+            ),
+          );
+        });
+
+        return returnval;
+      } else {
+        throw Exception(
+            'Failed to get data from server (Status code: ${response.statusCode})');
+      }
+    } catch (error) {
+      return Future.error(error);
+    }
+  }
+
+  static Future<Map<String, double>> statGenre(String username) async {
+    String url = ApiEndpointManager.user(UserEndpoints.STAT_GENRE);
+
+    try {
+      final response = await httpClient.post(Uri.parse(url).replace(
+        queryParameters: {
+          'user_name': username,
+        },
+      ));
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data =
+            json.decode(utf8.decode(response.bodyBytes));
+
+        Map<String, double> returnval = {};
+
+        data.forEach((key, value) {
+          returnval[key] = (value as int).toDouble();
+        });
+
+        return returnval;
+      } else {
+        throw Exception(
+            'Failed to get data from server (Status code: ${response.statusCode})');
+      }
+    } catch (error) {
+      return Future.error(error);
+    }
+  }
+
+  static Future<Map<String, double>> statArtist(String username) async {
+    String url = ApiEndpointManager.user(UserEndpoints.STAT_ARTIST);
+
+    try {
+      final response = await httpClient.post(Uri.parse(url).replace(
+        queryParameters: {
+          'user_name': username,
+        },
+      ));
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data =
+            json.decode(utf8.decode(response.bodyBytes));
+
+        Map<String, double> returnval = {};
+
+        data.forEach((key, value) {
+          returnval[key] = (value as int).toDouble();
+        });
+
+        return returnval;
+      } else {
+        throw Exception(
+            'Failed to get data from server (Status code: ${response.statusCode})');
+      }
+    } catch (error) {
+      return Future.error(error);
+    }
+  }
+
+  static Future<Map<String, double>> statFriends(String username) async {
+    String url = ApiEndpointManager.user(UserEndpoints.STAT_FRIENDS);
+
+    try {
+      final response = await httpClient.post(Uri.parse(url).replace(
+        queryParameters: {
+          'user_name': username,
+        },
+      ));
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data =
+            json.decode(utf8.decode(response.bodyBytes));
+
+        Map<String, double> returnval = {};
+
+        data.forEach((key, value) {
+          returnval[key] = (value as int).toDouble();
+        });
+
+        return returnval;
       } else {
         throw Exception(
             'Failed to get data from server (Status code: ${response.statusCode})');

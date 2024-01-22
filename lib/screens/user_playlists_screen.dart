@@ -82,7 +82,7 @@ class _UserPlaylistsScreenState extends State<UserPlaylistsScreen> {
                   listTitle: _userModel.playlists![index].listName,
                   futureTrackIDs:
                       _getListTrackIDs(_userModel.playlists![index]),
-                  emptyMsg: 'Playlist Empty!',
+                  emptyMsg: 'No songs in this playlist!',
                   refreshListScreen: _refresh,
                   isPlaylist: true,
                   onLongPress: (trackID) {

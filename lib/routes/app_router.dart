@@ -8,6 +8,7 @@ import 'package:musicee_app/screens/home_screen.dart';
 import 'package:musicee_app/screens/sign_up_screen.dart';
 import 'package:musicee_app/screens/sign_in_screen.dart';
 import 'package:musicee_app/screens/song_detail_screen.dart';
+import 'package:musicee_app/screens/top_songs_screen.dart';
 import 'package:musicee_app/screens/track_comments_screen.dart';
 import 'package:musicee_app/screens/update_track_screen.dart';
 import 'package:musicee_app/screens/user_comments_screen.dart';
@@ -140,6 +141,11 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => const AddJsonScreen(),
           settings: const RouteSettings(name: Routes.addJsonScreen),
+        );
+      case Routes.topSongsScreen:
+        return MaterialPageRoute(
+          builder: (_) => const TopSongsScreen(),
+          settings: const RouteSettings(name: Routes.topSongsScreen),
         );
       default:
         return MaterialPageRoute(

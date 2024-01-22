@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/models/user_detail_model.dart';
 import 'package:musicee_app/routes/routes.dart';
-import 'package:musicee_app/screens/user_playlists_screen.dart';
+import 'package:musicee_app/screens/stats_screen.dart';
 import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/services/auth/auth_manager.dart';
 import 'package:musicee_app/widgets/components/add_friend_button.dart';
@@ -23,6 +23,10 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen> {
   late UserDetailModel _userDetails;
 
+  late Map<String, double> _genreMap;
+  late Map<String, double> _artistsMap;
+  late Map<String, double> _friendsMap;
+
   // UI Logic
   bool _isButtonLoading = false;
   late bool _isFriend;
@@ -39,6 +43,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
     _isFriend = myProfile.friends!.contains(username);
 
+    if (username == AuthManager.getUsername()) {
+      _genreMap = await APIService.statGenre(AuthManager.getUsername());
+      _artistsMap = await APIService.statArtist(AuthManager.getUsername());
+      _friendsMap = await APIService.statFriends(AuthManager.getUsername());
+    }
+
     return returnval;
   }
 
@@ -54,7 +64,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           : null,
       body: FutureBuilderWithLoader(
         future: _futureFunction(
-            widget.username), //APIService.getUserDetails(widget.username),
+          widget.username,
+        ),
         onComplete: (snapshot) {
           _userDetails = snapshot.data as UserDetailModel;
           return Padding(
@@ -142,6 +153,21 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         ),
                       ],
                     ),
+                  if (widget.username == AuthManager.getUsername())
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomIconButton(
+                          buttonText: 'Statistics',
+                          buttonIcon: Icons.stacked_bar_chart_rounded,
+                          onPressed: () {
+                            _showStatsLogic(context);
+                          },
+                          width: 175,
+                          iconSize: 30,
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ),
@@ -221,6 +247,18 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         _refresh();
       },
     );
-    ;
+  }
+
+  void _showStatsLogic(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => StatsScreen(
+          genreMap: _genreMap,
+          artistMap: _artistsMap,
+          friendsMap: _friendsMap,
+        ),
+      ),
+    );
   }
 }

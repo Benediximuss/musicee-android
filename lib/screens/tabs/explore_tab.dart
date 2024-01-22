@@ -5,8 +5,8 @@ import 'package:musicee_app/routes/routes.dart';
 import 'package:musicee_app/screens/home_screen.dart';
 import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/services/auth/auth_manager.dart';
+import 'package:musicee_app/widgets/components/custom_icon_button.dart';
 import 'package:musicee_app/widgets/lists/recommendations_list.dart';
-import 'package:musicee_app/widgets/lists/recommendations_list_artists.dart';
 
 import '../../utils/color_manager.dart';
 
@@ -47,27 +47,29 @@ class _ExploreTabState extends State<ExploreTab>
             children: [
               Padding(
                 padding: const EdgeInsets.all(15.0),
-                child: SizedBox(
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, Routes.allTracksScreen);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: ColorManager.colorPrimary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: CustomIconButton(
+                        buttonText: ' All Songs',
+                        buttonIcon: Icons.view_list_rounded,
+                        onPressed: () {
+                          Navigator.pushNamed(context, Routes.allTracksScreen);
+                        },
                       ),
                     ),
-                    child: const Text(
-                      "All Songs",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 25,
-                        color: Colors.white,
+                    const SizedBox(width: 15),
+                    Expanded(
+                      child: CustomIconButton(
+                        buttonText: ' Top Songs',
+                        buttonIcon: Icons.star,
+                        onPressed: () {
+                          Navigator.pushNamed(context, Routes.topSongsScreen);
+                        },
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ),
               Container(
