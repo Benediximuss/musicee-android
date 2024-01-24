@@ -424,11 +424,19 @@ class AddTrackDialog extends StatelessWidget {
                 ModalRoute.withName(Routes.songDetailsScreen),
               );
 
-              Navigator.pushReplacementNamed(
+              Navigator.pop(context, true);
+
+              Navigator.pushNamed(
                 context,
                 Routes.songDetailsScreen,
                 arguments: {'trackID': trackID},
               );
+
+              // Navigator.pushReplacementNamed(
+              //   context,
+              //   Routes.songDetailsScreen,
+              //   arguments: {'trackID': trackID},
+              // );
             }
           },
           child: const DecoratedBox(

@@ -16,7 +16,10 @@ class UpdateTrackScreen extends StatelessWidget {
         title: const Text('Update a song'),
       ),
       body: FutureBuilderWithLoader(
-        future: APIService.getTrackDetails(trackID, true),
+        future: APIService.getTrackDetails(
+          trackID,
+          getGenre: true,
+        ),
         onComplete: (snapshot) {
           return TrackInputView(
             inputType: InputTypes.UPDATE,

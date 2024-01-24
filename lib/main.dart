@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/routes/app_router.dart';
 import 'package:musicee_app/routes/routes.dart';
+import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/services/auth/auth_manager.dart';
 import 'package:musicee_app/utils/theme_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  APIService.init();
 
   final bool isLogged = await AuthManager.init();
   AppRouter.initialRoute = isLogged ? Routes.homeScreen : Routes.welcomeScreen;

@@ -27,13 +27,13 @@ class LikeButton extends StatelessWidget {
           ),
           side: BorderSide(
             width: isLiked ? 4 : 3,
-            color: isLiked ? ColorManager.colorPrimary : Colors.grey,
+            color: isLiked ? ColorManager.colorPrimary : ColorManager.colorPrimary,
           ),
           // backgroundColor: isLoading ? Colors.green.shade200 : ColorManager.colorBG,
         ),
         child: isLoading
             ? SpinKitThreeBounce(
-                color: isLiked ? ColorManager.colorPrimary : Colors.grey,
+                color: isLiked ? ColorManager.colorPrimary : ColorManager.colorPrimary,
                 size: 25,
               )
             : Row(
@@ -42,7 +42,7 @@ class LikeButton extends StatelessWidget {
                   Icon(
                     isLiked ? Icons.thumb_up : Icons.thumb_up_off_alt,
                     size: isLiked ? 30 : 30,
-                    color: isLiked ? ColorManager.colorPrimary : Colors.grey,
+                    color: isLiked ? ColorManager.colorPrimary : ColorManager.colorPrimary,
                   ),
                   SizedBox(
                     width: 65,
@@ -51,7 +51,7 @@ class LikeButton extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 25,
                         color:
-                            isLiked ? ColorManager.colorPrimary : Colors.grey,
+                            isLiked ? ColorManager.colorPrimary : ColorManager.colorPrimary,
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.center,

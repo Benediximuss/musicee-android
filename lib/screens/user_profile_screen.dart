@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musicee_app/models/user_detail_model.dart';
 import 'package:musicee_app/routes/routes.dart';
+import 'package:musicee_app/screens/stats_screen.dart';
 import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/services/auth/auth_manager.dart';
 import 'package:musicee_app/widgets/components/add_friend_button.dart';
@@ -22,6 +23,10 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen> {
   late UserDetailModel _userDetails;
 
+  late Map<String, double> _genreMap;
+  late Map<String, double> _artistsMap;
+  late Map<String, double> _friendsMap;
+
   // UI Logic
   bool _isButtonLoading = false;
   late bool _isFriend;
@@ -38,6 +43,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
     _isFriend = myProfile.friends!.contains(username);
 
+    if (username == AuthManager.getUsername()) {
+      _genreMap = await APIService.statGenre(AuthManager.getUsername());
+      _artistsMap = await APIService.statArtist(AuthManager.getUsername());
+      _friendsMap = await APIService.statFriends(AuthManager.getUsername());
+    }
+
     return returnval;
   }
 
@@ -47,13 +58,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       appBar: widget.showAppBar
           ? AppBar(
               title: const Text(
-                'Profile',
+                'User Profile',
               ),
             )
           : null,
       body: FutureBuilderWithLoader(
         future: _futureFunction(
-            widget.username), //APIService.getUserDetails(widget.username),
+          widget.username,
+        ),
         onComplete: (snapshot) {
           _userDetails = snapshot.data as UserDetailModel;
           return Padding(
@@ -87,37 +99,45 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         buttonIcon: Icons.thumb_up,
                         buttonValue: _userDetails.likedSongs!.length.toString(),
                         onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            Routes.userLikesScreen,
-                            arguments: {
-                              'username': _userDetails.username!,
-                            },
-                          ).then(
-                            (_) {
-                              _refresh();
-                            },
-                          );
+                          _showLikesLogic(context);
                         },
+                        iconSize: 25,
                       ),
                       CustomIconButton(
+                        buttonText: 'Playlists',
+                        buttonIcon: Icons.playlist_play_rounded,
+                        buttonValue: _userDetails.playlists!.length.toString(),
+                        onPressed: () {
+                          _showPlaylistsLogic(context);
+                        },
+                        width: 175,
+                        iconSize: 30,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      CustomIconButton(
                         buttonText: 'Friends',
-                        buttonIcon: Icons.people_alt_outlined,
+                        buttonIcon: Icons.people_alt_rounded,
                         buttonValue: _userDetails.friends!.length.toString(),
                         onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            Routes.userFriendsScreen,
-                            arguments: {
-                              'username': _userDetails.username!,
-                              'friendsList': _userDetails.friends!,
-                            },
-                          ).then(
-                            (_) {
-                              _refresh();
-                            },
-                          );
+                          _showFriendsLogic(context);
                         },
+                        iconSize: 25,
+                      ),
+                      CustomIconButton(
+                        buttonText: 'Comments',
+                        buttonIcon: Icons.comment_rounded,
+                        buttonValue: _userDetails.comments!.length.toString(),
+                        onPressed: () {
+                          _showCommentsLogic(context);
+                        },
+                        width: 175,
+                        fontSize: 20,
+                        iconSize: 25,
                       ),
                     ],
                   ),
@@ -133,12 +153,56 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         ),
                       ],
                     ),
+                  if (widget.username == AuthManager.getUsername())
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomIconButton(
+                          buttonText: 'Statistics',
+                          buttonIcon: Icons.stacked_bar_chart_rounded,
+                          onPressed: () {
+                            _showStatsLogic(context);
+                          },
+                          width: 175,
+                          iconSize: 30,
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ),
           );
         },
       ),
+    );
+  }
+
+  void _showLikesLogic(BuildContext context) {
+    Navigator.pushNamed(
+      context,
+      Routes.userLikesScreen,
+      arguments: {
+        'username': _userDetails.username!,
+      },
+    ).then(
+      (_) {
+        _refresh();
+      },
+    );
+  }
+
+  void _showFriendsLogic(BuildContext context) {
+    Navigator.pushNamed(
+      context,
+      Routes.userFriendsScreen,
+      arguments: {
+        'username': _userDetails.username!,
+        'friendsList': _userDetails.friends!,
+      },
+    ).then(
+      (_) {
+        _refresh();
+      },
     );
   }
 
@@ -158,5 +222,43 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       });
       print("3131: Error adding!!! $error");
     });
+  }
+
+  void _showPlaylistsLogic(BuildContext context) {
+    Navigator.pushNamed(
+      context,
+      Routes.playlistsScreen,
+      arguments: {
+        'username': _userDetails.username!,
+        'isSelf': _userDetails.username! == AuthManager.getUsername(),
+      },
+    );
+  }
+
+  void _showCommentsLogic(BuildContext context) {
+    Navigator.pushNamed(
+      context,
+      Routes.userCommentsScreen,
+      arguments: {
+        'username': _userDetails.username!,
+      },
+    ).then(
+      (_) {
+        _refresh();
+      },
+    );
+  }
+
+  void _showStatsLogic(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => StatsScreen(
+          genreMap: _genreMap,
+          artistMap: _artistsMap,
+          friendsMap: _friendsMap,
+        ),
+      ),
+    );
   }
 }

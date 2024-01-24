@@ -23,17 +23,27 @@ class TrackCardVerticalList extends StatelessWidget {
           arguments: {
             'trackID': trackDetails.trackId,
           },
-        ).then((_) {
-          if (refreshListScreen != null) {
-            refreshListScreen!();
+        ).then((value) {
+          if (value != null) {
+            if (value == true) {
+              if (refreshListScreen != null) {
+                refreshListScreen!();
+                print("3131: refreshed list!");
+              } else {
+                print("3131: null refresher function!");
+              }
+            } else {
+              print("3131: no changes");
+            }
           } else {
-            print("3131: then null refresh!");
+            print("3131: nothing returned");
           }
         });
       },
       child: Card(
         elevation: 3,
         margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+        color: ColorManager.lighterSwatch.shade100,
         child: Container(
           padding: const EdgeInsets.all(8.0),
           child: Row(
@@ -87,6 +97,20 @@ class TrackCardVerticalList extends StatelessWidget {
                         const SizedBox(width: 5),
                         Text(
                           trackDetails.trackLikeList!.length.toString(),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        const SizedBox(width: 15),
+                        const Icon(
+                          Icons.comment,
+                          size: 18,
+                          color: Colors.black54,
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          trackDetails.comments!.length.toString(),
                           style: const TextStyle(
                             fontSize: 18,
                             color: Colors.grey,
