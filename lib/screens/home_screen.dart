@@ -3,6 +3,7 @@ import 'package:musicee_app/routes/routes.dart';
 import 'package:musicee_app/screens/tabs/explore_tab.dart';
 import 'package:musicee_app/screens/tabs/profile_tab.dart';
 import 'package:musicee_app/screens/tabs/people_tab.dart';
+import 'package:musicee_app/services/auth/auth_manager.dart';
 import 'package:musicee_app/utils/color_manager.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -54,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
           TextButton(
             onPressed: () {
               Navigator.popAndPushNamed(context, Routes.welcomeScreen);
+              AuthManager.logout();
             },
             child: const Icon(
               Icons.logout,

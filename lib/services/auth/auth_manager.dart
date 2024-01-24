@@ -1,10 +1,10 @@
 import 'package:musicee_app/models/sign_in_model.dart';
-import 'package:musicee_app/models/user_detail_model.dart';
+// import 'package:musicee_app/models/user_detail_model.dart';
 import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/services/storage/secure_storage_keys.dart';
 import 'package:musicee_app/services/storage/secure_storage_manager.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:collection/collection.dart';
+// import 'package:collection/collection.dart';
 
 class AuthManager {
   AuthManager._();
@@ -14,30 +14,39 @@ class AuthManager {
   static String? _username;
 
   static Future<bool> init() async {
-    _accessToken = await SecureStorageManager.getValue(SecureStorageKeys.accessTokenKey);
+    _accessToken =
+        await SecureStorageManager.getValue(SecureStorageKeys.accessTokenKey);
+    _username =
+        await SecureStorageManager.getValue(SecureStorageKeys.usernameKey);
 
-    if (_accessToken != null) {
-      print("3131: Token found!");
-      return await _initCredentials();
+    bool isLogged = false;
+
+    if (_accessToken != null && _username != null) {
+      try {
+        final userModel = await APIService.getUserDetails(_username!);
+        _email = _extractEmail(_accessToken!);
+
+        if (userModel.email != _email) {
+          print("3131: Emails not matching!");
+          isLogged = false;
+        } else {
+          print("3131: Welcome back $_username ($_email)");
+          isLogged = true;
+        }
+      } catch (error) {
+        print("3131: $error");
+        isLogged = false;
+      }
     } else {
-      print("3131: Token not found!");
-      return false;
+      print("3131: No credentials!");
+      isLogged = false;
     }
-  }
 
-  static Future<bool> _initCredentials() async {
-    _email = _extractEmail(_accessToken!);
-    print("3131: Email decoded: $_email");
-    _username = await _findUsernameOf(_email!);
-
-    if (_username == null) {
-      print("3131: Username not found, loggin out!");
+    if (!isLogged) {
       logout();
-      return false;
-    } else {
-      print("3131: Username found: $_username");
-      return true;
     }
+
+    return isLogged;
   }
 
   static void _setAccessToken(String token) {
@@ -50,30 +59,32 @@ class AuthManager {
     _accessToken = null;
   }
 
+  static void _setUsername(String username) {
+    SecureStorageManager.setValue(SecureStorageKeys.usernameKey, username);
+    _username = username;
+  }
+
+  static void _deleteUsername() {
+    SecureStorageManager.deleteKey(SecureStorageKeys.usernameKey);
+    _username = null;
+  }
+
   static String _extractEmail(String token) {
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
     return decodedToken['sub'];
-  }
-
-  static Future<String?> _findUsernameOf(String email) async {
-    // ignore: body_might_complete_normally_catch_error
-    final allUsers = await APIService.getUsersAll().catchError((error) {
-      print("3131: $error");
-    });
-    UserDetailModel? target = allUsers.firstWhereOrNull((user) => user.email == email);
-
-    return target?.username;
   }
 
   static String getUsername() {
     return _username!;
   }
 
-  static Future<SignInResponseModel> login(SignInRequestModel requestModel) async {
+  static Future<SignInResponseModel> login(
+      SignInRequestModel requestModel) async {
     final response = await APIService.login(requestModel);
+
     if (response.error.isEmpty) {
       _setAccessToken(response.accessToken);
-      await _initCredentials();
+      _setUsername(requestModel.username);
     }
 
     return response;
@@ -81,8 +92,7 @@ class AuthManager {
 
   static void logout() {
     _deleteToken();
+    _deleteUsername();
     _email = null;
-    _username = null;
   }
-
 }

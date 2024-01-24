@@ -7,8 +7,12 @@ class CustomIconButton extends StatelessWidget {
     required this.buttonIcon,
     this.buttonValue,
     this.height = 60,
-    this.width = 160,
+    this.width = 150,
     required this.onPressed,
+    this.fontSize = 25,
+    this.iconSize = 30,
+    this.valueFontSize = 25,
+    this.borderRadius = 10,
   }) : super(key: key);
 
   final String buttonText;
@@ -17,6 +21,10 @@ class CustomIconButton extends StatelessWidget {
   final void Function() onPressed;
   final double height;
   final double width;
+  final double fontSize;
+  final double iconSize;
+  final double valueFontSize;
+  final double borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +35,7 @@ class CustomIconButton extends StatelessWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
+            borderRadius: BorderRadius.circular(borderRadius),
           ),
         ),
         child: Row(
@@ -40,13 +48,13 @@ class CustomIconButton extends StatelessWidget {
                 children: [
                   Icon(
                     buttonIcon,
-                    size: 25,
+                    size: iconSize,
                   ),
                   const SizedBox(width: 2),
                   Text(
                     buttonValue!,
-                    style: const TextStyle(
-                      fontSize: 25,
+                    style: TextStyle(
+                      fontSize: valueFontSize,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -55,12 +63,12 @@ class CustomIconButton extends StatelessWidget {
             if (buttonValue == null)
               Icon(
                 buttonIcon,
-                size: 30,
+                size: iconSize,
               ),
             Text(
               buttonText,
-              style: const TextStyle(
-                fontSize: 25,
+              style: TextStyle(
+                fontSize: fontSize,
               ),
             ),
           ],

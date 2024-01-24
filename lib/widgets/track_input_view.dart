@@ -3,7 +3,7 @@ import 'package:musicee_app/models/track_model.dart';
 import 'package:musicee_app/routes/routes.dart';
 import 'package:musicee_app/utils/color_manager.dart';
 import 'package:musicee_app/utils/theme_manager.dart';
-import 'package:musicee_app/widgets/loader_view.dart';
+import 'package:musicee_app/widgets/loaders/loader_view.dart';
 
 class TrackInputView extends StatefulWidget {
   const TrackInputView({
@@ -424,11 +424,19 @@ class AddTrackDialog extends StatelessWidget {
                 ModalRoute.withName(Routes.songDetailsScreen),
               );
 
-              Navigator.pushReplacementNamed(
+              Navigator.pop(context, true);
+
+              Navigator.pushNamed(
                 context,
                 Routes.songDetailsScreen,
                 arguments: {'trackID': trackID},
               );
+
+              // Navigator.pushReplacementNamed(
+              //   context,
+              //   Routes.songDetailsScreen,
+              //   arguments: {'trackID': trackID},
+              // );
             }
           },
           child: const DecoratedBox(

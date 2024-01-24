@@ -20,6 +20,9 @@ class ProfileTab extends StatefulWidget {
 class _ProfileTabState extends State<ProfileTab>
     with AutomaticKeepAliveClientMixin {
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
     super.initState();
 
@@ -32,10 +35,8 @@ class _ProfileTabState extends State<ProfileTab>
   }
 
   @override
-  bool get wantKeepAlive => true;
-
-  @override
   Widget build(BuildContext context) {
+    print("3131: PROFILEEE");
     return UserProfileScreen(
       showAppBar: false,
       username: AuthManager.getUsername(),

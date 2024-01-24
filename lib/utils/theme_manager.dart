@@ -53,6 +53,10 @@ class ThemeManager {
           fontWeight: FontWeight.w600,
         ),
       ),
+      popupMenuTheme: PopupMenuThemeData(
+        color: ColorManager.lighterSwatch.shade200,
+        elevation: 12,
+      ),
     );
   }
 

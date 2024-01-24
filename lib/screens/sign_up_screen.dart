@@ -3,7 +3,7 @@ import 'package:musicee_app/routes/routes.dart';
 import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/models/sign_up_model.dart';
 import 'package:musicee_app/utils/theme_manager.dart';
-import 'package:musicee_app/widgets/loader_view.dart';
+import 'package:musicee_app/widgets/loaders/loader_view.dart';
 import '../utils/color_manager.dart';
 
 class SignUpScreen extends StatefulWidget {

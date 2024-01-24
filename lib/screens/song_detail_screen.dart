@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:musicee_app/models/playlist_model.dart';
 import 'package:musicee_app/models/track_model.dart';
 import 'package:musicee_app/routes/routes.dart';
 import 'package:musicee_app/services/api/api_service.dart';
 import 'package:musicee_app/services/auth/auth_manager.dart';
-import 'package:musicee_app/widgets/custom_icon_button.dart';
-import 'package:musicee_app/widgets/future_builder_with_loader.dart';
-import 'package:musicee_app/widgets/like_button.dart';
-import 'package:musicee_app/widgets/loader_view.dart';
+import 'package:musicee_app/utils/color_manager.dart';
+import 'package:musicee_app/widgets/components/custom_icon_button.dart';
+import 'package:musicee_app/widgets/components/custom_icon_button_mini.dart';
+import 'package:musicee_app/widgets/components/elevated_icon.dart';
+import 'package:musicee_app/widgets/loaders/future_builder_with_loader.dart';
+import 'package:musicee_app/widgets/components/like_button.dart';
+import 'package:musicee_app/widgets/loaders/loader_view.dart';
 import 'package:musicee_app/widgets/confirm_dialog.dart';
 
 class SongDetailScreen extends StatefulWidget {
   final String trackID;
 
-  const SongDetailScreen({Key? key, required this.trackID}) : super(key: key);
+  const SongDetailScreen({
+    super.key,
+    required this.trackID,
+  });
 
   @override
   _SongDetailScreenState createState() => _SongDetailScreenState();
@@ -27,6 +34,10 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
   bool _isButtonLoading = false;
   late bool _isLiked;
 
+  bool _isChanged = false;
+
+  final _popupMenu = GlobalKey<PopupMenuButtonState>();
+
   @override
   void initState() {
     super.initState();
@@ -35,7 +46,10 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
   }
 
   Future<TrackModel> updateAndGetList() async {
-    return APIService.getTrackDetails(widget.trackID);
+    return APIService.getTrackDetails(
+      widget.trackID,
+      getGenre: true,
+    );
   }
 
   bool _hasLiked() {
@@ -49,6 +63,22 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Song Details'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context, _isChanged);
+            },
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(
+                Icons.add_rounded,
+              ),
+              onPressed: () {
+                _addToPlaylist();
+              },
+            ),
+          ],
         ),
         body: FutureBuilderWithLoader(
           future: _futureModel,
@@ -56,37 +86,15 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
             _trackDetails = snapshot.data;
             _isLiked = _hasLiked();
             return Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 25.0,
+                vertical: 30.0,
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black26,
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Icon(
-                          Icons.music_note_rounded,
-                          size: 100,
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ),
+                  const ElevatedIcon(
+                    iconData: Icons.music_note_rounded,
                   ),
                   const SizedBox(height: 12),
                   Column(
@@ -124,9 +132,10 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
                               ),
                             ),
                           ),
+                          const SizedBox(height: 10),
                         ],
                       ),
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 30),
                       Column(
                         children: [
                           Row(
@@ -203,7 +212,9 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
                                     _trackDetails.trackLikeList!.length
                                         .toString(),
                                     style: const TextStyle(
-                                        fontSize: 24, color: Colors.black54),
+                                      fontSize: 24,
+                                      color: Colors.black54,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -213,19 +224,96 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        if (_trackDetails.trackArtist.length == 1)
+                          CustomIconButtonMini(
+                            buttonText: 'See artist',
+                            buttonIcon: Icons.people_alt_rounded,
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                context,
+                                Routes.artistScreen,
+                                arguments: {
+                                  'artistName': _trackDetails.trackArtist.first,
+                                },
+                              );
+                            },
+                          ),
+                        if (_trackDetails.trackArtist.length > 1)
+                          PopupMenuButton<String>(
+                            key: _popupMenu,
+                            color: ColorManager.colorBG,
+                            offset: const Offset(10, 0),
+                            elevation: 12,
+                            shape: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: ColorManager.colorPrimary,
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(8),
+                              ),
+                            ),
+                            child: CustomIconButtonMini(
+                              buttonText: 'See artists',
+                              buttonIcon: Icons.people_alt_rounded,
+                              onPressed: () {
+                                _popupMenu.currentState?.showButtonMenu();
+                              },
+                            ),
+                            onSelected: (value) {
+                              Navigator.pushNamed(
+                                context,
+                                Routes.artistScreen,
+                                arguments: {
+                                  'artistName': value,
+                                },
+                              );
+                            },
+                            itemBuilder: (context) => _trackDetails.trackArtist
+                                .map(
+                                  (item) => PopupMenuItem<String>(
+                                    value: item,
+                                    child: Text(
+                                      item,
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.grey.shade800,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        CustomIconButtonMini(
+                          buttonText: 'See album',
+                          buttonIcon: Icons.album_rounded,
+                          onPressed: () {
+                            Navigator.pushNamed(
+                              context,
+                              Routes.albumScreen,
+                              arguments: {
+                                'albumName': _trackDetails.trackAlbum,
+                                'artistName': _trackDetails.trackArtist.first,
+                              },
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CustomIconButton(
                             buttonText: 'Update',
                             buttonIcon: Icons.edit_rounded,
-                            height: 60,
-                            width: 140,
                             onPressed: () {
                               Navigator.pushNamed(
                                 context,
@@ -235,15 +323,15 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
                                 },
                               );
                             },
+                            borderRadius: 15,
                           ),
                           CustomIconButton(
                             buttonText: 'Delete',
                             buttonIcon: Icons.delete_rounded,
-                            height: 60,
-                            width: 140,
                             onPressed: () {
                               _deleteLogic(context);
                             },
+                            borderRadius: 15,
                           ),
                         ],
                       ),
@@ -255,6 +343,19 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
                             isLoading: _isButtonLoading,
                             isLiked: _isLiked,
                             onPressed: _likeLogic,
+                          ),
+                          const SizedBox(width: 15),
+                          CustomIconButton(
+                            buttonText: 'Comments',
+                            buttonIcon: Icons.comment_rounded,
+                            buttonValue:
+                                _trackDetails.comments!.length.toString(),
+                            onPressed: () {
+                              _showCommentsLogic(context);
+                            },
+                            width: 175,
+                            fontSize: 20,
+                            iconSize: 25,
                           ),
                         ],
                       ),
@@ -272,7 +373,7 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
   void _deleteLogic(final context) async {
     if (await confirmDialog(
       context: context,
-      warningText: 'Are you sure you want to delete the song?',
+      warningText: 'Are you sure you want to delete this song?',
       actionButtonText: 'Delete',
     )) {
       setState(() {
@@ -283,11 +384,7 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
         setState(() {
           _isLoading = false;
         });
-        if (value != null) {
-          print("3131: ZORTZORT OLDU");
-        } else {
-          Navigator.pop(context);
-        }
+        Navigator.pop(context, true);
       }).catchError((error) {
         setState(() {
           _isLoading = false;
@@ -301,7 +398,7 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
     if (_isLiked &&
         !(await confirmDialog(
           context: context,
-          warningText: 'Are you sure you want to unlike the song?',
+          warningText: 'Are you sure you want to unlike this song?',
           actionButtonText: 'Unlike',
         ))) {
       return;
@@ -316,6 +413,7 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
       setState(() {
         _isButtonLoading = false;
         _futureModel = updateAndGetList();
+        _isChanged = true;
       });
     }).catchError((error) {
       setState(() {
@@ -323,6 +421,107 @@ class _SongDetailScreenState extends State<SongDetailScreen> {
         _futureModel = updateAndGetList();
       });
       print("3131: Error liking!!! $error");
+    });
+  }
+
+  void _showCommentsLogic(BuildContext context) {
+    Navigator.pushNamed(
+      context,
+      Routes.trackCommentsScreen,
+      arguments: {
+        'trackDetails': _trackDetails,
+      },
+    ).then((value) {
+      if (value == true) {
+        setState(() {
+          _futureModel = updateAndGetList();
+          _isChanged = true;
+        });
+      }
+    }).catchError((error) {
+      setState(() {
+        _futureModel = updateAndGetList();
+        _isChanged = true;
+      });
+    });
+  }
+
+  bool _isAlreadyInPlaylist(PlaylistModel playlist) {
+    for (String trackID in playlist.trackIDs) {
+      if (trackID == _trackDetails.trackId) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void _addToPlaylist() async {
+    final userModel =
+        await APIService.getUserDetails(AuthManager.getUsername());
+
+    List<PopupMenuEntry<dynamic>> list = [];
+
+    if (userModel.playlists!.isNotEmpty) {
+      for (int i = 0; i < userModel.playlists!.length; i++) {
+        list.add(
+          PopupMenuItem<int>(
+            value: i,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  userModel.playlists![i].listName,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.grey.shade900,
+                  ),
+                ),
+                Builder(
+                  builder: (context) {
+                    if (!_isAlreadyInPlaylist(userModel.playlists![i])) {
+                      return Icon(
+                        Icons.playlist_add,
+                        color: Colors.green.shade700,
+                      );
+                    } else {
+                      return Icon(
+                        Icons.playlist_remove,
+                        color: ColorManager.darkerSwatch.shade200,
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    }
+
+    // ignore: use_build_context_synchronously
+    int selectedList = await showMenu(
+      context: context,
+      position: const RelativeRect.fromLTRB(
+          400, 80, 0, 0), // Adjust the position as needed
+      items: list,
+    );
+
+    print(
+        "3131: Selected playlist: ${userModel.playlists![selectedList].listName}");
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    APIService.addPlaylist(
+      AuthManager.getUsername(),
+      userModel.playlists![selectedList].listName,
+      _trackDetails.trackId!,
+    ).then((value) {
+      setState(() {
+        _isLoading = false;
+        _futureModel = updateAndGetList();
+      });
     });
   }
 }

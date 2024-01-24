@@ -2,56 +2,56 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:musicee_app/utils/color_manager.dart';
 
-class AddFriendButton extends StatelessWidget {
-  const AddFriendButton(
+class LikeButton extends StatelessWidget {
+  const LikeButton(
       {Key? key,
       required this.isLoading,
-      required this.isFriend,
+      required this.isLiked,
       required this.onPressed})
       : super(key: key);
 
   final bool isLoading;
-  final bool isFriend;
+  final bool isLiked;
   final void Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 80,
-      width: 180,
+      height: 60,
+      width: 150,
       child: OutlinedButton(
-        onPressed: (!isLoading && !isFriend) ? onPressed : null,
+        onPressed: isLoading ? null : onPressed,
         style: OutlinedButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
           side: BorderSide(
-            width: isFriend ? 4 : 3,
-            color: isFriend ? ColorManager.colorPrimary : Colors.grey,
+            width: isLiked ? 4 : 3,
+            color: isLiked ? ColorManager.colorPrimary : ColorManager.colorPrimary,
           ),
           // backgroundColor: isLoading ? Colors.green.shade200 : ColorManager.colorBG,
         ),
         child: isLoading
             ? SpinKitThreeBounce(
-                color: isFriend ? ColorManager.colorPrimary : Colors.grey,
+                color: isLiked ? ColorManager.colorPrimary : ColorManager.colorPrimary,
                 size: 25,
               )
             : Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Icon(
-                    isFriend ? Icons.favorite_rounded : Icons.group_add_rounded,
-                    size: 40,
-                    color: isFriend ? ColorManager.colorPrimary : Colors.grey,
+                    isLiked ? Icons.thumb_up : Icons.thumb_up_off_alt,
+                    size: isLiked ? 30 : 30,
+                    color: isLiked ? ColorManager.colorPrimary : ColorManager.colorPrimary,
                   ),
                   SizedBox(
-                    width: 80,
+                    width: 65,
                     child: Text(
-                      isFriend ? 'In friends' : 'Add friend',
+                      isLiked ? 'Liked' : 'Like',
                       style: TextStyle(
                         fontSize: 25,
                         color:
-                            isFriend ? ColorManager.colorPrimary : Colors.grey,
+                            isLiked ? ColorManager.colorPrimary : ColorManager.colorPrimary,
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.center,

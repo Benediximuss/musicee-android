@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:musicee_app/widgets/custom_loader_indicator.dart';
+import 'package:musicee_app/widgets/loaders/custom_loader_indicator.dart';
 
 class LoaderView extends StatelessWidget {
   final bool condition;

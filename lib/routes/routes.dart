@@ -12,5 +12,11 @@ class Routes {
   static const userLikesScreen = 'userLikes';
   static const addTrackScreen = 'addTrack';
   static const updateTrackScreen = 'updateTrack';
-  
+  static const artistScreen = 'artistTracks';
+  static const albumScreen = 'albumTracks';
+  static const trackCommentsScreen = 'trackComments';
+  static const userCommentsScreen = 'userComments';
+  static const addJsonScreen = 'addJson';
+  static const playlistsScreen = 'playlists';
+  static const topSongsScreen = 'topSongs';
 }

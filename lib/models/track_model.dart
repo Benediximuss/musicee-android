@@ -1,3 +1,5 @@
+import 'package:musicee_app/models/comment_model.dart';
+
 class TrackModel {
   String? trackId;
   String trackName;
@@ -6,6 +8,7 @@ class TrackModel {
   String? genre;
   int trackReleaseYear;
   List<String>? trackLikeList;
+  final List<CommentModel>? comments;
 
   TrackModel({
     this.trackId = 'id',
@@ -15,6 +18,7 @@ class TrackModel {
     this.genre,
     required this.trackReleaseYear,
     this.trackLikeList,
+    this.comments,
   });
 
   // Factory method to create a Track object from a map
@@ -27,6 +31,14 @@ class TrackModel {
       genre: json['genre'],
       trackReleaseYear: json['track_release_year'],
       trackLikeList: List<String>.from(json['like_list']),
+      comments: (json['comment'] as List<dynamic>?)
+          ?.map(
+            (commentJson) => CommentModel.fromJson(
+              commentJson,
+              json['track_name'],
+            ),
+          )
+          .toList(),
     );
   }
 
